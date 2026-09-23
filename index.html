@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -6,1238 +5,474 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>الرئيسية - منصة متوسطة وثانوية الأوائل</title>
 
-    <!-- ========= Additional Security Programs ========== -->
-    <!-- 1. Prevent page loading within iframe (Clickjacking Protection) -->
     <meta http-equiv="X-Frame-Options" content="DENY">
-    <!-- 2. Prevent the browser from guessing the MIME type (prevents the execution of malicious files) -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <!-- 3. Restricting access to dangerous features -->
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=()">
-    <!-- 4. Content Security Policy (CSP) - السماح بإطارات Wordwall -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
         script-src 'self' 'unsafe-inline' 'unsafe-eval' https:;
         style-src 'self' 'unsafe-inline' https:;
         font-src 'self' https: data:;
         img-src 'self' data: https: blob:;
-        connect-src 'self' https:;
-        frame-src 'self' https://wordwall.net;
+        connect-src 'self' https: https://graph.microsoft.com https://login.microsoftonline.com https://*.msauth.net http://localhost:11434 http://127.0.0.1:11434;
+        frame-src 'self' https://wordwall.net https://login.microsoftonline.com https://*.msauth.net;
         object-src 'none';
         base-uri 'self';
         form-action 'self';
     ">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
     <link rel="icon" type="image/png" href="https://i.postimg.cc/FH3FLXRR/abroad.png">
-    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-        }
-
-        body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ffffff;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .loading-screen.hide {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loading-screen img {
-            width: 100px;
-            margin-bottom: 20px;
-        }
-
-        .loading-text {
-            font-size: 24px;
-            color: #333333;
-            font-family: Arial, sans-serif;
-        }
-
-        .account-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 10000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .account-skeleton {
-            width: 320px;
-            padding: 24px;
-            border-radius: 16px;
-            background-color: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .skeleton-circle {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            margin: 0 auto 16px auto;
-            background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px);
-            background-size: 300%;
-            background-position: 100% 0;
-            animation: shimmer 1.5s infinite;
-        }
-        
-        .skeleton-title {
-            height: 24px;
-            width: 70%;
-            margin: 0 auto 12px auto;
-            border-radius: 8px;
-            background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px);
-            background-size: 300%;
-            background-position: 100% 0;
-            animation: shimmer 1.5s infinite;
-        }
-        
-        .skeleton-divider {
-            width: 50px;
-            height: 3px;
-            margin: 0 auto 16px auto;
-            border-radius: 3px;
-            background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px);
-            background-size: 300%;
-            background-position: 100% 0;
-            animation: shimmer 1.5s infinite;
-        }
-        
-        .skeleton-text {
-            height: 40px;
-            width: 100%;
-            margin: 12px 0;
-            border-radius: 8px;
-            background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px);
-            background-size: 300%;
-            background-position: 100% 0;
-            animation: shimmer 1.5s infinite;
-        }
-        
-        .skeleton-button {
-            height: 40px;
-            width: 100px;
-            margin: 20px auto 0 auto;
-            border-radius: 30px;
-            background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px);
-            background-size: 300%;
-            background-position: 100% 0;
-            animation: shimmer 1.5s infinite;
-        }
-        
-        @keyframes shimmer {
-            to {
-                background-position: -100% 0;
-            }
-        }
-        
-        .account-box {
-            border: 1px solid #e2e8f0;
-            padding: 24px;
-            width: 90%;
-            max-width: 360px;
-            border-radius: 16px;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-color: #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            margin: 0 auto;
-            text-align: center;
-            display: none;
-        }
-        
-        .profile-circle {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            border-radius: 50%;
-            margin: 0 auto 16px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .profile-circle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        
-        .profile-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        
-        .profile-circle .material-symbols-outlined {
-            font-size: 50px;
-            color: white;
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
-        }
-        
-        .avatar-edit-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            font-size: 10px;
-            padding: 4px 0;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            border-radius: 0 0 50% 50%;
-        }
-        
-        .profile-circle:hover .avatar-edit-overlay {
-            opacity: 1;
-        }
-        
-        .account-box h3 {
-            margin: 0 0 8px 0;
-            color: #1e293b;
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        
-        .account-box .user-email-display {
-            color: #64748b;
-            font-size: 0.85rem;
-            margin-bottom: 12px;
-            word-break: break-all;
-        }
-        
-        .account-box p {
-            color: #475569;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin: 12px 0 0 0;
-        }
-        
-        .account-box a {
-            color: #3b82f6;
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-block;
-            margin-top: 4px;
-        }
-        
-        .account-box a:hover {
-            text-decoration: underline;
-            color: #2563eb;
-        }
-        
-        .divider {
-            width: 50px;
-            height: 3px;
-            background: #3b82f6;
-            margin: 8px auto 0 auto;
-            border-radius: 3px;
-        }
-        
-        .edit-profile-section {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e2e8f0;
-            text-align: right;
-        }
-        
-        .edit-profile-section label {
-            display: block;
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-        
-        .edit-profile-section input[type="text"],
-        .edit-profile-section input[type="email"] {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            transition: border-color 0.3s;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            direction: rtl;
-        }
-        
-        .edit-profile-section input[type="text"]:focus,
-        .edit-profile-section input[type="email"]:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        .avatar-options {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-            justify-content: center;
-        }
-        
-        .avatar-option {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s ease;
-            object-fit: cover;
-            background-color: #f1f5f9;
-        }
-        
-        .avatar-option:hover {
-            border-color: #3b82f6;
-            transform: scale(1.1);
-        }
-        
-        .avatar-option.selected {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-        
-        .file-upload-wrapper {
-            position: relative;
-            display: inline-block;
-            margin: 5px 0;
-        }
-        
-        .file-upload-btn {
-            background: #f1f5f9;
-            border: 1px dashed #94a3b8;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            color: #475569;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .file-upload-btn:hover {
-            background: #e2e8f0;
-            border-color: #3b82f6;
-            color: #3b82f6;
-        }
-        
-        .file-upload-input {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-        }
-        
-        .save-profile-btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            margin-top: 10px;
-            transition: all 0.2s;
-            width: 100%;
-            font-weight: 500;
-        }
-        
-        .save-profile-btn:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
-        }
-        
-        .save-success {
-            color: #10b981;
-            font-size: 0.8rem;
-            margin-top: 8px;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .close-account-btn {
-            background: #e2e8f0;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 30px;
-            margin-top: 15px;
-            cursor: pointer;
-            color: #475569;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-        }
-        
-        .close-account-btn:hover {
-            background: #cbd5e1;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo img {
-            height: 88px;
-            width: auto;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-    
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            position: relative;
-        }
-
-        .apps-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .apps-btn {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: var(--dark-color);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 8px 12px;
-            border-radius: 30px;
-            transition: background 0.3s;
-        }
-
-        .apps-btn:hover {
-            background-color: #f0f2f5;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            left: 0;
-            top: 45px;
-            background-color: white;
-            min-width: 210px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            border-radius: 12px;
-            z-index: 1001;
-            overflow: hidden;
-            padding: 8px 0;
-        }
-
-        .dropdown-content a {
-            color: #333;
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: background 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .dropdown-content a i {
-            width: 24px;
-            font-size: 1.1rem;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f5f5f5;
-        }
-
-        .show-dropdown {
-            display: block;
-        }
-
-        .support-btn {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: var(--dark-color);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 8px 12px;
-            border-radius: 30px;
-            transition: background 0.3s;
-        }
-
-        .support-btn:hover {
-            background-color: #f0f2f5;
-        }
-
-        .exit-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .exit-modal-content {
-            background-color: white;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 350px;
-            padding: 30px 25px;
-            text-align: center;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
-            animation: fadeInUp 0.3s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .exit-modal-content img {
-            width: 180px;
-            max-width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .exit-modal-content p {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .confirm-exit-btn {
-            background: #e53935;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-
-        .confirm-exit-btn:hover {
-            background: #c62828;
-            transform: scale(1.05);
-        }
-
-        .material-symbols-outlined {
-            font-size: 20px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 400px;
-            padding: 30px 25px;
-            text-align: center;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
-            animation: fadeInUp 0.3s ease;
-            position: relative;
-        }
-
-        .modal-logo {
-            margin-bottom: 20px;
-        }
-
-        .modal-logo img {
-            width: 100px;
-            height: auto;
-            display: inline-block;
-        }
-
-        .support-text {
-            font-size: 1rem;
-            color: #2c3e50;
-            line-height: 1.6;
-            margin: 20px 0 10px;
-        }
-
-        .support-phone {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            direction: ltr;
-            display: inline-block;
-            margin-top: 8px;
-            background: #ecf9ff;
-            padding: 8px 16px;
-            border-radius: 50px;
-            letter-spacing: 1px;
-        }
-
-        .close-modal {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            margin-top: 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
-
-        .close-modal:hover {
-            background-color: #1e2b38;
-        }
-        
-        .outlook-link-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: #0072C6;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 15px 0 5px;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-            width: auto;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .outlook-link-btn i {
-            font-size: 1.2rem;
-        }
-        
-        .outlook-link-btn:hover {
-            background: #005a9e;
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .notification-note {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-            margin-top: 15px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.2s;
-            overflow: hidden;
-        }
-        
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-        
-        .header-username {
-            font-size: 0.9rem;
-            color: var(--dark-color);
-            font-weight: 500;
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .notification-icon {
-            position: relative;
-            font-size: 1.2rem;
-            color: var(--dark-color);
-            cursor: pointer;
-        }
-
-        .notification-count {
-            position: absolute;
-            top: -8px;
-            left: -8px;
-            background-color: var(--accent-color);
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 0.7rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        nav {
-            background-color: var(--secondary-color);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-
-        .nav-links li {
-            padding: 15px 20px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .nav-links i {
-            margin-left: 8px;
-        }
-
-        .nav-links .active {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .card-header h2 {
-            color: var(--secondary-color);
-            font-size: 1.2rem;
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .welcome-banner {
-            background: linear-gradient(135deg, rgba(255, 205, 139, 0.92), rgba(44, 62, 80, 0.92));
-            color: white;
-            padding: 30px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .welcome-banner::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://i.postimg.cc/Bbk2HyTX/art.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0.25;
-            z-index: -1;
-        }
-        
-        .welcome-banner h2,
-        .welcome-banner p {
-            position: relative;
-            z-index: 2;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        }
-        
-        .welcome-banner h2 {
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-        }
-        
-        .welcome-banner p {
-            font-size: 1rem;
-        }
-
-        .images-section {
-            background: white;
-            border-radius: 8px;
-            padding: 25px 20px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .from-wikipedia {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-            color: #2c3e50;
-            font-weight: 500;
-        }
-        
-        .wikipedia-icon {
-            height: 36px;
-            width: auto;
-            border: none;
-            outline: none;
-            box-shadow: none;
-            background: transparent;
-        }
-        
-        .baby-globe-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-        
-        .globe-side {
-            transition: transform 0.3s ease;
-        }
-        
-        .globe-side:hover {
-            transform: scale(1.05);
-        }
-        
-        .globe-img-side {
-            height: 140px;
-            width: auto;
-            border: none;
-            box-shadow: none;
-            background: transparent;
-            object-fit: contain;
-        }
-        
-        .globe-img-main {
-            height: 180px;
-            width: auto;
-            border: none;
-            box-shadow: none;
-            background: transparent;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-        
-        .globe-img-main:hover {
-            transform: scale(1.02);
-        }
-        
-        .breakline {
-            width: 80%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), var(--primary-color), transparent);
-            margin: 20px auto;
-            border-radius: 2px;
-        }
-        
-        .projects-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin-top: 15px;
-        }
-        
-        .wiki-project-card {
-            text-decoration: none;
-            text-align: center;
-            width: 110px;
-            transition: transform 0.2s ease;
-        }
-        
-        .wiki-project-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .wiki-project-img {
-            height: 90px;
-            width: auto;
-            border: none;
-            box-shadow: none;
-            background: transparent;
-            object-fit: contain;
-        }
-        
-        .project-name {
-            margin-top: 10px;
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 14px;
-        }
-        
-        .project-desc {
-            font-size: 11px;
-            color: #7f8c8d;
-        }
-        
-        .caption-text {
-            font-size: 14px;
-            color: #7f8c8d;
-            background: #f8f9fa;
-            padding: 6px 18px;
-            border-radius: 25px;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .course-card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-            color: inherit;
-        }
-
-        .course-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .course-image {
-            height: 150px;
-            background-color: var(--primary-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .course-info {
-            padding: 15px;
-        }
-
-        .course-info h3 {
-            margin-bottom: 10px;
-            color: var(--secondary-color);
-        }
-        
-        .course-description {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-            line-height: 1.4;
-            margin-top: 8px;
-        }
-        
-        .youtube-link {
-            display: inline-block;
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: #188ec5;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-        
-        .youtube-link:hover {
-            color: #0000CC;
-            text-decoration: underline;
-        }
-
-        .wordwall-games, .math-games {
-            margin-bottom: 20px;
-        }
-
-        .game-item {
-            margin-bottom: 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .game-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .wordwall-link {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background-color: #f9f9f9;
-            text-decoration: none;
-            color: #333;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        footer {
-            background-color: white;
-            color: #333;
-            padding: 30px 0;
-            margin-top: 40px;
-            border-top: 1px solid #eee;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .copyright {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-logo img {
-            height: 40px;
-            margin: 0 10px;
-        }
-
-        .made-by {
-            font-size: 0.9rem;
-            color: #777;
-        }
-
-        @media (max-width: 992px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            .footer-logo {
-                margin-top: 15px;
-            }
-            .user-menu {
-                gap: 8px;
-            }
-            .apps-btn span, .support-btn span {
-                display: none;
-            }
-            .header-username {
-                display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                justify-content: center;
-            }
-            .nav-links li {
-                padding: 12px 10px;
-            }
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            .user-menu {
-                margin-top: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .logo img {
-                height: 60px;
-            }
-            .welcome-banner h2 {
-                font-size: 1.5rem;
-            }
-            .globe-img-main {
-                height: 140px;
-            }
-            .globe-img-side {
-                height: 100px;
-            }
-            .wiki-project-img {
-                height: 70px;
-            }
-            .wiki-project-card {
-                width: 90px;
-            }
-            .project-name {
-                font-size: 12px;
-            }
-            .breakline {
-                width: 90%;
-            }
-            .courses-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        .datepicker-dropdown { position: absolute; z-index: 10050; background: #ffffff; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); padding: 12px; width: 290px; font-family: 'Segoe UI', Tahoma, sans-serif; direction: rtl; user-select: none; animation: dpFadeIn 0.15s ease-out; }
+        @keyframes dpFadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+        .datepicker-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 6px; }
+        .datepicker-title { font-size: 0.95rem; font-weight: 700; color: #1e293b; flex: 1; text-align: center; }
+        .datepicker-prev, .datepicker-next { background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; color: #475569; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.2s, color 0.2s; font-family: inherit; }
+        .datepicker-prev:hover, .datepicker-next:hover { background: #dbeafe; color: #2563eb; }
+        .datepicker-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 6px; }
+        .datepicker-weekdays span { text-align: center; font-size: 0.72rem; color: #64748b; font-weight: 600; padding: 4px 0; }
+        .datepicker-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+        .datepicker-cell { background: transparent; border: none; padding: 7px 0; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.85rem; color: #1e293b; transition: background 0.15s, color 0.15s; line-height: 1.2; }
+        .datepicker-cell:hover { background: #eff6ff; color: #2563eb; }
+        .datepicker-cell.outside { color: #cbd5e1; }
+        .datepicker-cell.today:not(.selected) { border: 1px solid #3b82f6; color: #2563eb; font-weight: 700; }
+        .datepicker-cell.selected { background: #3b82f6; color: #ffffff; font-weight: 700; }
+        .datepicker-cell.selected:hover { background: #2563eb; }
+        .datepicker-footer { display: flex; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px solid #e2e8f0; }
+        .datepicker-today, .datepicker-clear { flex: 1; background: #f1f5f9; border: none; padding: 7px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.78rem; color: #475569; transition: background 0.2s, color 0.2s; }
+        .datepicker-today:hover { background: #dbeafe; color: #2563eb; }
+        .datepicker-clear:hover { background: #fee2e2; color: #dc2626; }
+        .course-field input.datepicker { background-color: #ffffff; cursor: pointer; padding-left: 34px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left 10px center; }
+        @media (max-width: 480px) { .datepicker-dropdown { width: 260px; padding: 10px; } .datepicker-cell { padding: 6px 0; font-size: 0.8rem; } }
+
+        .ai-warning-msg { border-radius: 12px; padding: 12px 16px; margin: 8px 0; font-size: 0.85rem; line-height: 1.7; direction: rtl; text-align: right; border-right: 5px solid; animation: warningFadeIn 0.35s ease; display: flex; align-items: flex-start; gap: 10px; align-self: flex-start; max-width: 92%; }
+        @keyframes warningFadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        .ai-warning-msg .warning-body { flex: 1; }
+        .ai-warning-msg .warning-icon-wrap { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #ffffff; }
+        .ai-warning-msg .warning-icon-wrap .ti { font-size: 19px; }
+        .ai-warning-msg .warning-title { font-weight: 700; display: block; margin-bottom: 4px; font-size: 0.9rem; }
+        .ai-warning-msg.politics { background: #eff6ff; border-color: #2563eb; color: #1e3a8a; }
+        .ai-warning-msg.politics .warning-icon-wrap { background: #2563eb; }
+        .ai-warning-msg.politics .warning-title { color: #1e40af; }
+        .ai-warning-msg.danger { background: #fef2f2; border-color: #dc2626; color: #7f1d1d; }
+        .ai-warning-msg.danger .warning-icon-wrap { background: #dc2626; }
+        .ai-warning-msg.danger .warning-title { color: #991b1b; }
+        .ai-warning-msg.sexual { background: #f5f3ff; border-color: #7c3aed; color: #4c1d95; }
+        .ai-warning-msg.sexual .warning-icon-wrap { background: #7c3aed; }
+        .ai-warning-msg.sexual .warning-title { color: #5b21b6; }
+        .ai-warning-msg.selfharm { background: #fff7ed; border-color: #ea580c; color: #7c2d12; }
+        .ai-warning-msg.selfharm .warning-icon-wrap { background: #ea580c; }
+        .ai-warning-msg.selfharm .warning-title { color: #9a3412; }
+        .ai-warning-msg.profanity { background: #f1f5f9; border-color: #64748b; color: #334155; }
+        .ai-warning-msg.profanity .warning-icon-wrap { background: #64748b; }
+        .ai-warning-msg.profanity .warning-title { color: #475569; }
+
+        .auto-notice { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 1px solid #fcd34d; border-right: 4px solid #f59e0b; border-radius: 10px; padding: 12px 14px; margin-bottom: 6px; }
+        .auto-notice .notice-header { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px dashed #fbbf24; }
+        .auto-notice .notice-header .ti { color: #d97706; font-size: 20px; }
+        .auto-notice .notice-header strong { color: #92400e; font-size: 0.88rem; font-weight: 700; }
+        .auto-notice .notice-greeting { display: flex; align-items: center; gap: 6px; color: #78350f; font-size: 0.84rem; font-weight: 700; margin-bottom: 8px; }
+        .auto-notice .notice-greeting .ti { color: #b45309; font-size: 16px; }
+        .auto-notice p { margin: 0 0 8px 0; color: #78350f; font-size: 0.82rem; line-height: 1.7; }
+        .auto-notice p:last-child { margin-bottom: 0; }
+        .auto-notice code { background: #fde68a; padding: 2px 7px; border-radius: 5px; font-size: 0.76rem; direction: ltr; display: inline-block; font-family: 'Consolas', 'Monaco', monospace; color: #92400e; font-weight: 600; }
+        .auto-notice .notice-highlight { background: #fef3c7; border-right: 3px solid #f59e0b; padding: 6px 10px; border-radius: 6px; margin: 8px 0; color: #78350f; font-size: 0.8rem; line-height: 1.6; }
+        .auto-notice .notice-thanks { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #fbbf24; color: #92400e; font-size: 0.8rem; font-weight: 600; }
+        .auto-notice .notice-thanks .ti { color: #d97706; font-size: 16px; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root { --primary-color: #3498db; --secondary-color: #2c3e50; --accent-color: #e74c3c; --light-color: #ecf0f1; --dark-color: #2c3e50; --success-color: #2ecc71; --warning-color: #f39c12; }
+        body { background-color: #f5f7fa; color: #333; line-height: 1.6; }
+        .ti { font-size: 20px; line-height: 1; vertical-align: middle; display: inline-block; }
+
+        .loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s ease, visibility 0.5s ease; }
+        .loading-screen.hide { opacity: 0; visibility: hidden; }
+        .loading-screen img { width: 100px; margin-bottom: 20px; }
+        .loading-text { font-size: 24px; color: #333333; font-family: Arial, sans-serif; }
+
+        .account-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 15px; overflow-y: auto; }
+        .account-skeleton { width: 320px; padding: 24px; border-radius: 16px; background-color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: 0 auto; text-align: center; }
+        .skeleton-circle { width: 75px; height: 75px; border-radius: 50%; margin: 0 auto 16px auto; background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px); background-size: 300%; background-position: 100% 0; animation: shimmer 1.5s infinite; }
+        .skeleton-title { height: 24px; width: 70%; margin: 0 auto 12px auto; border-radius: 8px; background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px); background-size: 300%; background-position: 100% 0; animation: shimmer 1.5s infinite; }
+        .skeleton-divider { width: 50px; height: 3px; margin: 0 auto 16px auto; border-radius: 3px; background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px); background-size: 300%; background-position: 100% 0; animation: shimmer 1.5s infinite; }
+        .skeleton-text { height: 40px; width: 100%; margin: 12px 0; border-radius: 8px; background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px); background-size: 300%; background-position: 100% 0; animation: shimmer 1.5s infinite; }
+        .skeleton-button { height: 40px; width: 100px; margin: 20px auto 0 auto; border-radius: 30px; background-image: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px); background-size: 300%; background-position: 100% 0; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { to { background-position: -100% 0; } }
+        
+        .account-box { border: 1px solid #e2e8f0; padding: 24px; width: 90%; max-width: 380px; max-height: 90vh; overflow-y: auto; border-radius: 16px; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: 0 auto; text-align: center; display: none; }
+        .profile-circle { width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6, #2563eb); border-radius: 50%; margin: 0 auto 16px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; position: relative; cursor: pointer; transition: all 0.3s ease; }
+        .profile-circle:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .profile-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .profile-circle .ti { font-size: 50px; color: white; }
+        .avatar-edit-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; font-size: 10px; padding: 4px 0; opacity: 0; transition: opacity 0.3s ease; border-radius: 0 0 50% 50%; }
+        .profile-circle:hover .avatar-edit-overlay { opacity: 1; }
+        .account-box h3 { margin: 0 0 8px 0; color: #1e293b; font-size: 1.3rem; font-weight: 600; }
+        .account-box .user-email-display { color: #64748b; font-size: 0.85rem; margin-bottom: 12px; word-break: break-all; }
+        .account-box p { color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 12px 0 0 0; }
+        .account-box a { color: #3b82f6; text-decoration: none; font-weight: 500; display: inline-block; margin-top: 4px; }
+        .account-box a:hover { text-decoration: underline; color: #2563eb; }
+        .divider { width: 50px; height: 3px; background: #3b82f6; margin: 8px auto 0 auto; border-radius: 3px; }
+
+        .stage-selector-box { margin: 14px 0 0 0; padding: 10px 12px; border-radius: 12px; background: #fef9f3; border: 1px dashed #fbbf24; text-align: right; }
+        .stage-selector-box label { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 700; color: #92400e; margin-bottom: 6px; }
+        .stage-selector-box label .ti { font-size: 16px; color: #d97706; }
+        .stage-selector-box select { width: 100%; padding: 8px 12px; border: 1px solid #fcd34d; border-radius: 8px; font-size: 0.88rem; font-family: inherit; direction: rtl; color: #1e293b; background: #ffffff; cursor: pointer; transition: border-color 0.3s, box-shadow 0.3s; }
+        .stage-selector-box select:focus { outline: none; border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18); }
+
+        .fixed-info-box { margin: 10px 0 0 0; padding: 10px 12px; border-radius: 12px; background: #f0f7ff; border: 1px dashed #93c5fd; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .fixed-info-box .ti-school { color: #2563eb; font-size: 18px; }
+        .fixed-info-box .school-name { font-size: 0.88rem; font-weight: 700; color: #1e3a8a; }
+        .fixed-info-box .lock-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 0.68rem; font-weight: 600; color: #64748b; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 2px 8px; }
+        .fixed-info-box .lock-tag .ti { font-size: 12px; }
+        
+        .edit-profile-section { margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0; text-align: right; }
+        .edit-profile-section label { display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 4px; font-weight: 500; }
+        .edit-profile-section input[type="text"], .edit-profile-section input[type="email"] { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; margin-bottom: 10px; transition: border-color 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; direction: rtl; }
+        .edit-profile-section input[type="text"]:focus, .edit-profile-section input[type="email"]:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        
+        .avatar-options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; justify-content: center; }
+        .avatar-option { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease; object-fit: cover; background-color: #f1f5f9; }
+        .avatar-option:hover { border-color: #3b82f6; transform: scale(1.1); }
+        .avatar-option.selected { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        
+        .file-upload-wrapper { position: relative; display: inline-block; margin: 5px 0; }
+        .file-upload-btn { background: #f1f5f9; border: 1px dashed #94a3b8; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; color: #475569; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .file-upload-btn:hover { background: #e2e8f0; border-color: #3b82f6; color: #3b82f6; }
+        .file-upload-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; top: 0; left: 0; }
+        
+        .save-profile-btn { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; margin-top: 10px; transition: all 0.2s; width: 100%; font-weight: 500; }
+        .save-profile-btn:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3); }
+        
+        .save-success { color: #10b981; font-size: 0.8rem; margin-top: 8px; display: none; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .close-account-btn { background: #e2e8f0; border: none; padding: 8px 20px; border-radius: 30px; margin-top: 15px; cursor: pointer; color: #475569; font-size: 0.8rem; transition: all 0.2s; }
+        .close-account-btn:hover { background: #cbd5e1; }
+
+        .student-section { margin-top: 16px; padding-top: 14px; border-top: 1px solid #e2e8f0; text-align: right; }
+        .student-section h4 { font-size: 0.9rem; color: #1e293b; margin-bottom: 8px; display: flex; align-items: center; gap: 7px; font-weight: 700; }
+        .student-section h4 .ti { color: #3b82f6; font-size: 18px; }
+        .student-section textarea { width: 100%; min-height: 62px; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.85rem; resize: vertical; direction: rtl; color: #1e293b; transition: border-color 0.3s; }
+        .student-section textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+
+        .talent-note { font-size: 0.78rem; color: #2563eb; background: #eff6ff; border-right: 3px solid #3b82f6; padding: 8px 12px; border-radius: 8px; margin-top: 8px; line-height: 1.5; text-align: right; }
+
+        .clear-ai-history-box { margin-top: 14px; padding: 12px; border-radius: 12px; background: #fef2f2; border: 1px solid #fecaca; border-right: 4px solid #dc2626; text-align: right; }
+        .clear-ai-history-box .clear-ai-title { display: flex; align-items: center; gap: 7px; font-size: 0.85rem; font-weight: 700; color: #991b1b; margin-bottom: 8px; }
+        .clear-ai-history-box .clear-ai-title .ti { font-size: 18px; color: #dc2626; }
+        .clear-ai-history-box .clear-ai-desc { font-size: 0.73rem; color: #7f1d1d; line-height: 1.55; margin-bottom: 10px; }
+        .clear-ai-history-btn { width: 100%; background: #dc2626; color: #ffffff; border: none; padding: 9px 16px; border-radius: 10px; cursor: pointer; font-size: 0.82rem; font-weight: 700; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 7px; transition: background 0.2s, transform 0.15s; }
+        .clear-ai-history-btn:hover { background: #b91c1c; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(220, 38, 38, 0.25); }
+        .clear-ai-history-btn:active { transform: translateY(0); }
+        .clear-ai-history-btn .ti { font-size: 16px; }
+        .clear-ai-history-success { color: #059669; font-size: 0.76rem; margin-top: 8px; text-align: center; display: none; animation: fadeIn 0.3s ease; font-weight: 600; }
+
+        .no-courses-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 8px 10px 8px; margin: 0; gap: 8px; }
+        .no-courses-icon { width: 120px; height: 120px; object-fit: contain; }
+        .no-courses { font-size: 0.82rem; color: #94a3b8; text-align: center; padding: 0; margin: 0; font-weight: 500; line-height: 1.5; }
+
+        .course-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+        .course-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; font-weight: 700; color: #2563eb; }
+        .remove-course-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; cursor: pointer; padding: 4px 8px; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; transition: background 0.2s; }
+        .remove-course-btn:hover { background: #fecaca; }
+        .course-field { position: relative; }
+        .course-field label { display: block; font-size: 0.72rem; color: #64748b; margin-bottom: 3px; font-weight: 600; }
+        .course-field input { width: 100%; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; margin-bottom: 9px; font-family: inherit; direction: rtl; color: #1e293b; transition: border-color 0.3s; }
+        .course-field input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .add-course-btn { width: 100%; background: #eff6ff; color: #2563eb; border: 1px dashed #93c5fd; border-radius: 10px; padding: 10px; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; }
+        .add-course-btn:hover { background: #dbeafe; }
+        .required-note { font-size: 0.7rem; color: #94a3b8; margin-top: 6px; text-align: right; }
+
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        header { background-color: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        .logo { display: flex; align-items: center; }
+        .logo img { height: 88px; width: auto; object-fit: contain; transition: transform 0.3s ease; }
+        .user-menu { display: flex; align-items: center; gap: 20px; position: relative; }
+        .apps-dropdown { position: relative; display: inline-block; }
+        .apps-btn { background: none; border: none; font-size: 1.2rem; color: var(--dark-color); cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 8px 12px; border-radius: 30px; transition: background 0.3s; }
+        .apps-btn:hover { background-color: #f0f2f5; }
+        .dropdown-content { display: none; position: absolute; left: 0; top: 45px; background-color: white; min-width: 210px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-radius: 12px; z-index: 1001; overflow: hidden; padding: 8px 0; }
+        .dropdown-content a { color: #333; padding: 12px 20px; text-decoration: none; display: flex; align-items: center; gap: 12px; transition: background 0.2s; font-size: 0.9rem; }
+        .dropdown-content a .ti { width: 24px; font-size: 1.1rem; color: var(--primary-color); }
+        .dropdown-content a:hover { background-color: #f5f5f5; }
+        .show-dropdown { display: block; }
+        .support-btn { background: none; border: none; font-size: 1.2rem; color: var(--dark-color); cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 8px 12px; border-radius: 30px; transition: background 0.3s; }
+        .support-btn:hover { background-color: #f0f2f5; }
+
+        .exit-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; }
+        .exit-modal-content { background-color: white; border-radius: 24px; width: 90%; max-width: 350px; padding: 30px 25px; text-align: center; box-shadow: 0 20px 35px rgba(0,0,0,0.3); animation: fadeInUp 0.3s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .exit-modal-content img { width: 180px; max-width: 100%; margin-bottom: 20px; }
+        .exit-modal-content p { font-size: 18px; color: #333; margin-bottom: 25px; line-height: 1.6; }
+        .confirm-exit-btn { background: #e53935; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .confirm-exit-btn .ti { font-size: 20px; }
+        .confirm-exit-btn:hover { background: #c62828; transform: scale(1.05); }
+
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; }
+        .modal-content { background-color: white; border-radius: 24px; width: 90%; max-width: 400px; padding: 30px 25px; text-align: center; box-shadow: 0 20px 35px rgba(0,0,0,0.3); animation: fadeInUp 0.3s ease; position: relative; }
+        .modal-logo { margin-bottom: 20px; }
+        .modal-logo img { width: 100px; height: auto; display: inline-block; }
+        .support-text { font-size: 1rem; color: #2c3e50; line-height: 1.6; margin: 20px 0 10px; }
+        .support-phone { font-size: 1.05rem; font-weight: bold; color: var(--primary-color); direction: ltr; display: inline-block; margin-top: 8px; background: #ecf9ff; padding: 10px 18px; border-radius: 50px; letter-spacing: 0.3px; text-decoration: none; word-break: break-all; transition: background 0.2s, color 0.2s; }
+        .support-phone:hover { background: #d5f0ff; color: #1c6ea4; }
+        .close-modal { background-color: var(--secondary-color); color: white; border: none; padding: 10px 24px; border-radius: 40px; margin-top: 25px; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; }
+        .close-modal:hover { background-color: #1e2b38; }
+        
+        .outlook-link-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: #0072C6; color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; font-weight: bold; margin: 15px 0 5px; transition: all 0.3s ease; font-size: 1rem; width: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .outlook-link-btn .ti { font-size: 1.2rem; }
+        .outlook-link-btn:hover { background: #005a9e; transform: scale(1.02); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .notification-note { font-size: 0.85rem; color: #7f8c8d; margin-top: 15px; }
+
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-color); display: flex; justify-content: center; align-items: center; color: white; cursor: pointer; transition: transform 0.2s; overflow: hidden; }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .user-avatar .ti { font-size: 20px; color: #fff; }
+        .user-avatar:hover { transform: scale(1.05); }
+        .header-username { font-size: 0.9rem; color: var(--dark-color); font-weight: 500; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .notification-icon { position: relative; font-size: 1.2rem; color: var(--dark-color); cursor: pointer; }
+        .notification-icon .ti { font-size: 22px; }
+        .notification-count { position: absolute; top: -8px; left: -8px; background-color: var(--accent-color); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: flex; justify-content: center; align-items: center; }
+
+        nav { background-color: var(--secondary-color); background-image: linear-gradient(90deg, #263544, #2c3e50 45%, #263544); box-shadow: 0 2px 8px rgba(0,0,0,0.12); position: relative; z-index: 999; }
+        .nav-links { display: flex; list-style: none; flex-wrap: wrap; align-items: center; gap: 2px; }
+        .nav-links > li { position: relative; }
+        .nav-links > li > a, .nav-group-btn { display: flex; align-items: center; gap: 8px; padding: 16px 18px; color: #ffffff; text-decoration: none; background: none; border: none; font-size: 0.95rem; font-family: inherit; line-height: 1; white-space: nowrap; cursor: pointer; border-bottom: 3px solid transparent; transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease; }
+        .nav-links > li > a:hover, .nav-group-btn:hover, .nav-group.open > .nav-group-btn { color: var(--primary-color); background-color: rgba(255,255,255,0.06); }
+        .nav-links .active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .nav-group-btn .caret { font-size: 0.65rem; margin: 0; transition: transform 0.3s ease; }
+        .nav-group.open > .nav-group-btn .caret { transform: rotate(180deg); }
+        .nav-dropdown { position: absolute; top: 100%; right: 0; min-width: 245px; background-color: #ffffff; list-style: none; margin: 0; padding: 8px 0; border-radius: 0 0 14px 14px; box-shadow: 0 12px 28px rgba(0,0,0,0.18); opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease; z-index: 1002; overflow: hidden; }
+        .nav-dropdown::before { content: ""; position: absolute; top: 0; right: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color)); }
+        .nav-dropdown li { padding: 0; }
+        .nav-dropdown a { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: #2c3e50; text-decoration: none; font-size: 0.88rem; transition: background-color 0.2s ease, color 0.2s ease, padding 0.2s ease; }
+        .nav-dropdown a .ti { width: 20px; margin: 0; text-align: center; font-size: 0.95rem; color: var(--primary-color); transition: color 0.2s ease; }
+        .nav-dropdown a:hover { background-color: #f0f7ff; color: var(--primary-color); padding-right: 26px; }
+
+        @media (hover: hover) and (min-width: 769px) {
+            .nav-group:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+            .nav-group:hover > .nav-group-btn { color: var(--primary-color); background-color: rgba(255,255,255,0.06); }
+            .nav-group:hover > .nav-group-btn .caret { transform: rotate(180deg); }
+        }
+
+        .main-content { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; margin: 20px 0; }
+        .card { background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .card-header h2 { color: var(--secondary-color); font-size: 1.2rem; }
+        .sidebar { display: flex; flex-direction: column; }
+
+        .welcome-banner { background: linear-gradient(135deg, rgba(255, 205, 139, 0.92), rgba(44, 62, 80, 0.92)); color: white; padding: 30px; border-radius: 8px; margin-bottom: 20px; text-align: center; position: relative; overflow: hidden; z-index: 1; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .welcome-banner::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.postimg.cc/Bbk2HyTX/art.png'); background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 0.25; z-index: -1; }
+        .welcome-banner h2, .welcome-banner p { position: relative; z-index: 2; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+        .welcome-banner h2 { margin-bottom: 10px; font-size: 1.8rem; }
+        .welcome-banner p { font-size: 1rem; }
+
+        .images-section { background: white; border-radius: 8px; padding: 25px 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        .from-wikipedia { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; font-size: 1.1rem; color: #2c3e50; font-weight: 500; }
+        .wikipedia-icon { height: 36px; width: auto; border: none; outline: none; box-shadow: none; background: transparent; }
+        .baby-globe-row { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 25px; }
+        .globe-side { transition: transform 0.3s ease; }
+        .globe-side:hover { transform: scale(1.05); }
+        .globe-img-side { height: 140px; width: auto; border: none; box-shadow: none; background: transparent; object-fit: contain; }
+        .globe-img-main { height: 180px; width: auto; border: none; box-shadow: none; background: transparent; object-fit: contain; transition: transform 0.3s ease; }
+        .globe-img-main:hover { transform: scale(1.02); }
+        .breakline { width: 80%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), var(--primary-color), transparent); margin: 20px auto; border-radius: 2px; }
+        .projects-row { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 30px; margin-top: 15px; }
+        .wiki-project-card { text-decoration: none; text-align: center; width: 110px; transition: transform 0.2s ease; }
+        .wiki-project-card:hover { transform: translateY(-5px); }
+        .wiki-project-img { height: 90px; width: auto; border: none; box-shadow: none; background: transparent; object-fit: contain; }
+        .project-name { margin-top: 10px; font-weight: bold; color: #2c3e50; font-size: 14px; }
+        .project-desc { font-size: 11px; color: #7f8c8d; }
+        .caption-text { font-size: 14px; color: #7f8c8d; background: #f8f9fa; padding: 6px 18px; border-radius: 25px; display: inline-block; margin-top: 20px; }
+        
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .course-card { background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); transition: transform 0.3s; cursor: pointer; text-decoration: none; display: block; color: inherit; }
+        .course-card:hover { transform: translateY(-5px); }
+        .course-image { height: 150px; background-color: var(--primary-color); display: flex; justify-content: center; align-items: center; color: white; font-size: 1.5rem; }
+        .course-image .ti { font-size: 2.5rem; }
+        .course-info { padding: 15px; }
+        .course-info h3 { margin-bottom: 10px; color: var(--secondary-color); }
+        .course-description { font-size: 0.85rem; color: #7f8c8d; line-height: 1.4; margin-top: 8px; }
+        .youtube-link { display: inline-block; margin-top: 10px; font-size: 0.8rem; color: #188ec5; text-decoration: none; font-weight: bold; transition: color 0.3s; }
+        .youtube-link:hover { color: #0000CC; text-decoration: underline; }
+
+        .wordwall-games, .math-games { margin-bottom: 20px; }
+        .game-item { margin-bottom: 15px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; transition: transform 0.3s; }
+        .game-item:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .wordwall-link { display: flex; align-items: center; padding: 10px; background-color: #f9f9f9; text-decoration: none; color: #333; border-top: 1px solid #e0e0e0; }
+
+        footer { background-color: white; color: #333; padding: 30px 0; margin-top: 40px; border-top: 1px solid #eee; }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .copyright { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .footer-logo { display: flex; align-items: center; }
+        .footer-logo img { height: 40px; margin: 0 10px; }
+        .made-by { font-size: 0.9rem; color: #777; }
+
+        .ai-panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(3px); z-index: 4000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .ai-panel-overlay.show { opacity: 1; visibility: visible; }
+
+        .ai-panel { position: fixed; top: 0; left: 0; width: 420px; max-width: 100%; height: 100vh; background: #ffffff; z-index: 4001; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 6px 0 24px rgba(0,0,0,0.18); }
+        .ai-panel.show { transform: translateX(0); }
+
+        .ai-panel-header { background-color: #000; color: #fff; height: 60px; display: flex; align-items: center; padding: 0 14px; box-sizing: border-box; flex-shrink: 0; direction: ltr; }
+        .ai-panel-header img { height: 40px; width: auto; margin-right: 14px; }
+        .top-bar-title { font-family: "Tiny5", system-ui, sans-serif; font-size: 28px; letter-spacing: 1px; color: #fff; flex: 1; line-height: 1; direction: ltr; text-align: left; }
+
+        .ai-close-btn { background: rgba(255,255,255,0.08); border: none; color: #ffffff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; flex-shrink: 0; }
+        .ai-close-btn:hover { background: rgba(255,255,255,0.2); }
+        .ai-close-btn .ti { font-size: 18px; }
+
+        .ai-warning { position: relative; background: #fef2f2; border: 1px solid #fecaca; border-right: 5px solid #dc2626; color: #991b1b; padding: 12px 40px 12px 14px; margin: 12px 14px 6px 14px; border-radius: 10px; font-size: 0.76rem; line-height: 1.65; display: flex; gap: 10px; align-items: flex-start; flex-shrink: 0; animation: warningPulse 3s ease-in-out infinite; direction: rtl; text-align: right; transition: opacity 0.35s ease, transform 0.35s ease, margin 0.35s ease, padding 0.35s ease, max-height 0.35s ease; overflow: hidden; }
+        .ai-warning.hidden { opacity: 0; transform: translateY(-10px); max-height: 0; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; pointer-events: none; }
+        .ai-warning-content { flex: 1; }
+        @keyframes warningPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } 50% { box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08); } }
+        .ai-warning .ti { font-size: 22px; color: #dc2626; flex-shrink: 0; margin-top: 1px; }
+        .ai-warning strong { display: block; font-size: 0.8rem; margin-bottom: 4px; color: #b91c1c; }
+
+        .ai-warning-close { position: absolute; top: 8px; left: 8px; background: transparent; border: none; color: #dc2626; cursor: pointer; padding: 0; width: auto; height: auto; display: flex; align-items: center; justify-content: center; line-height: 1; }
+        .ai-warning-close .ti { font-size: 18px; color: #dc2626; }
+
+        .ai-messages { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; background-image: linear-gradient(rgba(15, 23, 42, 0.28), rgba(15, 23, 42, 0.28)), url('https://i.postimg.cc/SsxQLcwR/ashim-d-silva-We-Yamle9f-DM-unsplash.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; }
+
+        .ai-messages::-webkit-scrollbar { width: 6px; }
+        .ai-messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        .ai-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.55); border-radius: 10px; }
+        .ai-messages::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.8); }
+
+        .ai-msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 0.86rem; line-height: 1.6; word-wrap: break-word; animation: msgFade 0.3s ease; }
+        @keyframes msgFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ai-msg.user { align-self: flex-end; background: rgba(59, 130, 246, 0.94); color: #ffffff; border-radius: 14px 14px 4px 14px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); white-space: pre-wrap; text-align: right; backdrop-filter: blur(4px); }
+        .ai-msg.bot { align-self: flex-start; background: rgba(255, 255, 255, 0.94); color: #1e293b; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 14px 14px 14px 4px; text-align: right; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18); backdrop-filter: blur(4px); }
+
+        .ai-msg.bot h1, .ai-msg.bot h2, .ai-msg.bot h3 { margin: 8px 0 5px 0; color: #1e293b; line-height: 1.35; font-weight: 700; }
+        .ai-msg.bot h1 { font-size: 1.08rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; }
+        .ai-msg.bot h2 { font-size: 1rem; }
+        .ai-msg.bot h3 { font-size: 0.92rem; color: #334155; }
+        .ai-msg.bot h1:first-child, .ai-msg.bot h2:first-child, .ai-msg.bot h3:first-child { margin-top: 0; }
+        .ai-msg.bot p { margin: 4px 0; }
+        .ai-msg.bot p:first-child { margin-top: 0; }
+        .ai-msg.bot p:last-child { margin-bottom: 0; }
+        .ai-msg.bot ul, .ai-msg.bot ol { margin: 6px 0; padding-right: 22px; padding-left: 0; }
+        .ai-msg.bot li { margin: 4px 0; line-height: 1.55; position: relative; }
+        .ai-msg.bot ul li::marker { color: #3b82f6; font-weight: 700; }
+        .ai-msg.bot ol li::marker { color: #2563eb; font-weight: 700; }
+        .ai-msg.bot strong { color: #1d4ed8; font-weight: 800; }
+        .ai-msg.bot em { color: #7c3aed; font-style: italic; font-weight: 500; }
+        .ai-msg.bot code { background: #f1f5f9; color: #be185d; padding: 2px 7px; border-radius: 5px; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.82rem; direction: ltr; display: inline-block; border: 1px solid #e2e8f0; unicode-bidi: embed; }
+        .ai-msg.bot pre { background: #0f172a; color: #e2e8f0; padding: 10px 12px; border-radius: 8px; overflow-x: auto; direction: ltr; text-align: left; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.78rem; margin: 8px 0; line-height: 1.5; }
+        .ai-msg.bot pre code { background: transparent; color: inherit; padding: 0; border: none; font-size: inherit; display: block; }
+        .ai-msg.bot hr { border: none; border-top: 1px solid #e2e8f0; margin: 10px 0; }
+        .ai-msg.bot blockquote { border-right: 3px solid #3b82f6; padding: 6px 12px; margin: 8px 0; background: #f8fafc; color: #475569; border-radius: 4px; font-style: italic; }
+        .ai-msg.bot a { color: #2563eb; text-decoration: underline; font-weight: 500; }
+        .ai-msg.bot a:hover { color: #1d4ed8; text-decoration: none; }
+        .ai-msg.bot .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; background: #dbeafe; color: #1e40af; margin: 0 3px; }
+        .ai-msg.bot .badge-green { background: #dcfce7; color: #166534; }
+        .ai-msg.bot .badge-orange { background: #ffedd5; color: #9a3412; }
+        .ai-msg.bot table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 0.78rem; direction: rtl; }
+        .ai-msg.bot table th, .ai-msg.bot table td { border: 1px solid #e2e8f0; padding: 6px 8px; text-align: right; }
+        .ai-msg.bot table th { background: #f1f5f9; color: #334155; font-weight: 700; }
+        .ai-msg.bot table tr:nth-child(even) td { background: #f8fafc; }
+
+        .ai-msg-footer { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+        .ai-msg.bot .ai-msg-footer { justify-content: space-between; }
+        .ai-msg.user .ai-msg-footer { justify-content: flex-end; }
+
+        .ai-msg-time { font-size: 0.62rem; opacity: 0.6; margin: 0; line-height: 1; }
+        .ai-msg.user .ai-msg-time { color: rgba(255,255,255,0.85); }
+
+        .ai-msg-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+        .ai-msg-listen-btn { background: transparent; border: 1px solid #cbd5e1; color: #64748b; border-radius: 8px; padding: 4px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-family: inherit; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; line-height: 1; white-space: nowrap; }
+        .ai-msg-listen-btn:hover { background: #eff6ff; color: #3b82f6; border-color: #93c5fd; }
+        .ai-msg-listen-btn.speaking { background: #eff6ff; color: #2563eb; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+        .ai-msg-listen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .ai-msg-listen-btn .ti { font-size: 13px; }
+
+        .ai-msg-report-btn { background: transparent; border: 1px solid #fecaca; color: #dc2626; border-radius: 8px; padding: 4px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-family: inherit; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease; line-height: 1; white-space: nowrap; }
+        .ai-msg-report-btn:hover { background: #fef2f2; color: #b91c1c; border-color: #f87171; transform: translateY(-1px); box-shadow: 0 2px 6px rgba(220, 38, 38, 0.15); }
+        .ai-msg-report-btn:active { transform: translateY(0); }
+        .ai-msg-report-btn .ti { font-size: 13px; }
+
+        .ai-typing { align-self: flex-start; background: rgba(255,255,255,0.94); border: 1px solid rgba(226,232,240,0.8); padding: 12px 16px; border-radius: 14px 14px 14px 4px; display: inline-flex; gap: 4px; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.18); backdrop-filter: blur(4px); }
+        .ai-typing span { width: 7px; height: 7px; background: #94a3b8; border-radius: 50%; animation: typingBounce 1.4s infinite ease-in-out; }
+        .ai-typing span:nth-child(2) { animation-delay: 0.15s; }
+        .ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-6px); opacity: 1; } }
+
+        .ai-input-area { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid #e2e8f0; background: #ffffff; align-items: flex-end; flex-shrink: 0; }
+        .ai-input-area .tiptap-wrapper { flex: 1; min-width: 0; display: flex; flex-direction: column; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; transition: border-color 0.25s, box-shadow 0.25s; overflow: hidden; }
+        .ai-input-area .tiptap-wrapper:focus-within { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12); }
+        .ai-input-area .ProseMirror { flex: 1; min-height: 42px; max-height: 100px; overflow-y: auto; padding: 10px 12px; font-size: 0.86rem; direction: rtl; color: #1e293b; line-height: 1.5; outline: none; font-family: inherit; caret-color: #3b82f6; word-wrap: break-word; white-space: pre-wrap; }
+        .ai-input-area .ProseMirror p { margin: 0; }
+        .ai-input-area .ProseMirror p + p { margin-top: 4px; }
+        .ai-input-area .ProseMirror ul, .ai-input-area .ProseMirror ol { margin: 4px 0; padding-right: 22px; padding-left: 0; }
+        .ai-input-area .ProseMirror li { margin: 2px 0; }
+        .ai-input-area .ProseMirror p.is-editor-empty:first-child::before { content: attr(data-placeholder); color: #94a3b8; pointer-events: none; float: right; height: 0; }
+
+        .tiptap-toolbar { display: flex; gap: 2px; padding: 4px 6px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+        .tiptap-toolbar-btn { background: transparent; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer; color: #64748b; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.15s, color 0.15s; font-family: inherit; line-height: 1; }
+        .tiptap-toolbar-btn:hover { background: #e2e8f0; color: #3b82f6; }
+        .tiptap-toolbar-btn.active { background: #dbeafe; color: #2563eb; }
+        .tiptap-toolbar-btn .ti { font-size: 15px; }
+
+        .ai-send-btn { width: 42px; height: 42px; border-radius: 12px; background: #3b82f6; color: #ffffff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.15s; flex-shrink: 0; }
+        .ai-send-btn:hover:not(:disabled) { background: #2563eb; transform: scale(1.05); }
+        .ai-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .ai-send-btn .ti { font-size: 18px; }
 
         @media (max-width: 480px) {
-            .container {
-                width: 95%;
-                padding: 0 10px;
-            }
-            .welcome-banner {
-                padding: 20px 15px;
-            }
-            .welcome-banner h2 {
-                font-size: 1.3rem;
-            }
-            .card {
-                padding: 15px;
-            }
-            .globe-img-main {
-                height: 120px;
-            }
-            .globe-img-side {
-                height: 80px;
-            }
-            .logo img {
-                height: 50px;
-            }
-            .user-avatar {
-                width: 35px;
-                height: 35px;
-            }
+            .ai-panel { width: 100%; }
+            .ai-warning { font-size: 0.72rem; padding: 10px 36px 10px 12px; }
+            .top-bar-title { font-size: 22px; }
+            .ai-panel-header img { height: 34px; margin-right: 10px; }
+        }
+        @media (max-width: 992px) {
+            .main-content { grid-template-columns: 1fr; }
+            .footer-content { flex-direction: column; text-align: center; }
+            .footer-logo { margin-top: 15px; }
+            .user-menu { gap: 8px; }
+            .apps-btn span, .support-btn span { display: none; }
+            .header-username { display: none; }
+        }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; text-align: center; }
+            .user-menu { margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+            .logo img { height: 60px; }
+            .nav-links { flex-direction: column; align-items: stretch; gap: 0; }
+            .nav-links > li { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .nav-links > li > a, .nav-group-btn { width: 100%; justify-content: space-between; padding: 14px 16px; border-bottom: none; }
+            .nav-links .active { background-color: rgba(52,152,219,0.16); border-bottom: none; border-right: 4px solid var(--primary-color); }
+            .nav-dropdown { position: static; min-width: 0; opacity: 1; visibility: visible; transform: none; box-shadow: none; border-radius: 0; background-color: rgba(255,255,255,0.05); max-height: 0; padding: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; }
+            .nav-dropdown::before { display: none; }
+            .nav-group.open .nav-dropdown { max-height: 600px; padding: 6px 0; }
+            .nav-dropdown a { color: #e6edf5; padding: 11px 30px; }
+            .nav-dropdown a:hover { background-color: rgba(255,255,255,0.08); color: #ffffff; padding-right: 34px; }
+            .welcome-banner h2 { font-size: 1.5rem; }
+            .globe-img-main { height: 140px; }
+            .globe-img-side { height: 100px; }
+            .wiki-project-img { height: 70px; }
+            .wiki-project-card { width: 90px; }
+            .project-name { font-size: 12px; }
+            .breakline { width: 90%; }
+            .courses-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .container { width: 95%; padding: 0 10px; }
+            .welcome-banner { padding: 20px 15px; }
+            .welcome-banner h2 { font-size: 1.3rem; }
+            .card { padding: 15px; }
+            .globe-img-main { height: 120px; }
+            .globe-img-side { height: 80px; }
+            .logo img { height: 50px; }
+            .user-avatar { width: 35px; height: 35px; }
+            .account-box { padding: 18px; width: 100%; }
+            .no-courses-icon { width: 64px; height: 64px; }
         }
     </style>
 </head>
@@ -1256,14 +491,33 @@
             <div class="skeleton-text"></div>
             <div class="skeleton-button"></div>
         </div>
+
         <div id="accountBox" class="account-box">
             <div class="profile-circle" id="profileCirclePopup" title="انقر لتغيير الصورة">
-                <span class="material-symbols-outlined" id="defaultAvatarIcon">account_circle</span>
+                <i class="ti ti-user-circle" id="defaultAvatarIcon"></i>
                 <img id="profileImagePopup" src="" alt="صورة المستخدم" style="display: none;">
                 <div class="avatar-edit-overlay">تغيير</div>
             </div>
             <h3 id="displayName">مستخدم لمنصة الأوائل</h3>
             <div class="user-email-display" id="displayEmail"></div>
+
+            <div class="stage-selector-box">
+                <label for="stageSelect">
+                    <i class="ti ti-switch-horizontal"></i>
+                    تغيير المرحلة الدراسية
+                </label>
+                <select id="stageSelect">
+                    <option value="متوسطة">المرحلة المتوسطة</option>
+                    <option value="ثانوية">المرحلة الثانوية</option>
+                </select>
+            </div>
+
+            <div class="fixed-info-box">
+                <i class="ti ti-school ti-school"></i>
+                <span class="school-name" id="schoolNameDisplay">متوسطة الأوائل بأبها</span>
+                <span class="lock-tag"><i class="ti ti-lock"></i> ثابت</span>
+            </div>
+
             <div class="divider"></div>
             
             <div class="edit-profile-section">
@@ -1283,19 +537,68 @@
                 
                 <div class="file-upload-wrapper">
                     <button class="file-upload-btn">
-                        <i class="fas fa-upload"></i> رفع من الجهاز
+                        <i class="ti ti-upload"></i> رفع من الجهاز
                     </button>
                     <input type="file" class="file-upload-input" id="fileUploadInput" accept="image/*">
                 </div>
                 
                 <button class="save-profile-btn" id="saveProfileBtn">
-                    <i class="fas fa-save"></i> حفظ التغييرات
+                    <i class="ti ti-device-floppy"></i> حفظ التغييرات
                 </button>
                 <div class="save-success" id="saveSuccess">✓ تم الحفظ بنجاح</div>
             </div>
+
+            <div class="student-section">
+                <h4><i class="ti ti-bulb"></i> المهارات</h4>
+                <textarea id="skillsInput" placeholder="اكتب مهاراتك هنا..."></textarea>
+            </div>
+
+            <div class="student-section">
+                <h4><i class="ti ti-certificate"></i> الدورات التعليمية</h4>
+                <div id="coursesContainer"></div>
+                <button type="button" class="add-course-btn" id="addCourseBtn">
+                    <i class="ti ti-plus"></i> إضافة دورة
+                </button>
+            </div>
+
+            <div class="student-section">
+                <h4><i class="ti ti-ball-football"></i> الأنشطة الرياضية</h4>
+                <textarea id="sportsInput" placeholder="اكتب الأنشطة الرياضية هنا..."></textarea>
+            </div>
+
+            <div class="student-section">
+                <h4><i class="ti ti-palette"></i> الهوايات</h4>
+                <textarea id="hobbiesInput" placeholder="اكتب هواياتك هنا..."></textarea>
+                <p class="talent-note" id="talentNote">
+                    إذا انتهيت من تسجيل موهبتك أو هوايتك، يُرجى التحدث إلى مشرف الموهوبين في مدرسة الأوائل المتوسطة بأبها.
+                </p>
+
+                <div class="clear-ai-history-box">
+                    <div class="clear-ai-title">
+                        <i class="ti ti-trash-off"></i>
+                        الإعدادات
+                    </div>
+                    <div class="clear-ai-desc">
+                        مسح سجل المحادثات نهائياً مع Restudio Nellsoft AI. لا يمكن التراجع عن هذا الإجراء.
+                    </div>
+                    <button type="button" class="clear-ai-history-btn" id="clearAIHistoryBtn">
+                        <i class="ti ti-trash"></i>
+                        مسح سجل المحادثات نهائيا مع Restudio Nellsoft AI
+                    </button>
+                    <div class="clear-ai-history-success" id="clearAIHistorySuccess">✓ تم مسح سجل المحادثات بنجاح</div>
+                </div>
+            </div>
+
+            <div class="student-section">
+                <button class="save-profile-btn" id="saveStudentBtn">
+                    <i class="ti ti-device-floppy"></i> حفظ بياناتي
+                </button>
+                <div class="save-success" id="saveStudentSuccess">✓ تم حفظ بياناتك بنجاح</div>
+                <div class="required-note">الحقول المعلَّمة بـ * إلزامية داخل كل دورة.</div>
+            </div>
             
             <p>لرؤية تفاصيل الحساب يرجى الذهاب إلى 
-                <a href="https://schools.madrasati.sa" target="_blank">منصة مدرستي</a>
+                <a href="https://restudiosoftwarelaboratories.github.io/Restudio-Account-Hub/" target="_blank">Restudio Account Hub</a>
             </p>
             <button class="close-account-btn" id="closeAccountBtn">إغلاق</button>
         </div>
@@ -1309,44 +612,32 @@
                 </div>
                 <div class="user-menu">
                     <div class="notification-icon" id="notificationBtn">
-                        <i class="fas fa-bell"></i>
+                        <i class="ti ti-bell"></i>
                         <span class="notification-count">1</span>
                     </div>
                     
                     <div class="apps-dropdown">
                         <button class="apps-btn" id="appsDropdownBtn">
-                            <i class="fas fa-th"></i>
+                            <i class="ti ti-layout-grid"></i>
                             <span>التطبيقات</span>
                         </button>
                         <div class="dropdown-content" id="appsDropdownMenu">
-                            <a href="#" data-external="https://restudiosoftwarelaboratories.github.io/Restudio-Presentation/" class="external-link">
-                                <i class="fas fa-chalkboard"></i> Restudio Presentation
-                            </a>
-                            <a href="#" data-external="https://restudiosoftwarelaboratories.github.io/Restudio-Documents/" class="external-link">
-                                <i class="fas fa-file-alt"></i> Restudio Documents
-                            </a>
-                            <a href="#" data-external="https://restudiosoftwarelaboratories.github.io/Restudio-Tables/" class="external-link">
-                                <i class="fas fa-table"></i> Restudio Tables
-                            </a>
-                            <a href="#" data-external="https://outlook.office.com/" class="external-link">
-                                <i class="fas fa-envelope"></i> Outlook
-                            </a>
-                            <a href="#" data-external="https://www.microsoft.com/ar/microsoft-teams/download-app" class="external-link">
-                                <i class="fas fa-users"></i> Teams
-                            </a>
-                            <a href="#" data-external="https://www.microsoft.com/ar/microsoft-365/" class="external-link">
-                                <i class="fab fa-microsoft"></i> Microsoft 365
-                            </a>
+                            <a href="#" data-external="https://restudiosoftwarelaboratories.github.io/Restudio-Presentation/" class="external-link"><i class="ti ti-presentation"></i> Restudio Presentation</a>
+                            <a href="#" data-external="https://restudiosoftwarelaboratories.github.io/Restudio-Documents/" class="external-link"><i class="ti ti-file-text"></i> Restudio Documents</a>
+                            <a href="#" data-external="https://restudiosoftwarelaboratories.github.io/Restudio-Tables/" class="external-link"><i class="ti ti-table"></i> Restudio Tables</a>
+                            <a href="#" data-external="https://outlook.office.com/" class="external-link"><i class="ti ti-mail"></i> Outlook</a>
+                            <a href="#" data-external="https://www.microsoft.com/ar/microsoft-teams/download-app" class="external-link"><i class="ti ti-users"></i> Teams</a>
+                            <a href="#" data-external="https://www.microsoft.com/ar/microsoft-365/" class="external-link"><i class="ti ti-brand-windows"></i> Microsoft 365</a>
                         </div>
                     </div>
                     
                     <button class="support-btn" id="supportBtn">
-                        <i class="fas fa-headset"></i>
+                        <i class="ti ti-headset"></i>
                         <span>الدعم الفني</span>
                     </button>
                     
                     <div class="user-avatar" id="profileBtn" title="الملف الشخصي">
-                        <i class="fas fa-user" id="headerDefaultIcon"></i>
+                        <i class="ti ti-user" id="headerDefaultIcon"></i>
                         <img id="headerAvatarImg" src="" alt="صورة المستخدم" style="display: none;">
                     </div>
                     <span class="header-username" id="headerUsername">مستخدم لمنصة الأوائل</span>
@@ -1358,13 +649,62 @@
     <nav>
         <div class="container">
             <ul class="nav-links">
-                <li><a href="https://Restudio-Education.github.io/al-awael-main-menu/" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
-                <li><a href="https://Restudio-Education.github.io/al-awael-Study-materials/"><i class="fas fa-book"></i> المواد الدراسية</a></li>
-                <li><a href="https://Restudio-Education.github.io/al-awael-homework/"><i class="fas fa-tasks"></i> الواجبات</a></li>
-                <li><a href="https://Restudio-Education.github.io/al-awael-Calendar/"><i class="fas fa-calendar-alt"></i> التقويم</a></li>
-                <li><a href="https://Restudio-Education.github.io/al-awael-Reports/"><i class="fas fa-chart-bar"></i> التقارير</a></li>
-                <li><a href="https://Restudio-Education.github.io/al-awael-virtual-classrooms/"><i class="fas fa-video"></i> الفصول الافتراضية</a></li>
-                <li><a href="https://Restudio-Education.github.io/al-awael-exams/"><i class="fas fa-file-alt"></i> الاختبارات</a></li>
+                <li>
+                    <a href="https://Restudio-Education.github.io/al-awael-main-menu/" class="active">
+                        <i class="ti ti-home"></i> الرئيسية
+                    </a>
+                </li>
+
+                <li class="nav-group">
+                    <button type="button" class="nav-group-btn" aria-expanded="false">
+                        <i class="ti ti-books"></i> المصادر
+                        <i class="ti ti-chevron-down caret"></i>
+                    </button>
+                    <ul class="nav-dropdown">
+                        <li><a href="https://Restudio-Education.github.io/al-awael-homework/"><i class="ti ti-checklist"></i> الواجبات</a></li>
+                        <li><a href="https://Restudio-Education.github.io/al-awael-exams/"><i class="ti ti-file-text"></i> الاختبارات</a></li>
+                        <li><a href="https://Restudio-Education.github.io/al-awael-Calendar/"><i class="ti ti-calendar"></i> التقويم</a></li>
+                        <li><a href="https://Restudio-Education.github.io/al-awael-virtual-classrooms/"><i class="ti ti-video"></i> الفصول الافتراضية</a></li>
+                        <li><a href=""><i class="ti ti-badge-ad"></i> الإعلانات</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-group">
+                    <button type="button" class="nav-group-btn" aria-expanded="false">
+                        <i class="ti ti-school"></i> المقررات
+                        <i class="ti ti-chevron-down caret"></i>
+                    </button>
+                    <ul class="nav-dropdown">
+                        <li><a href="https://Restudio-Education.github.io/al-awael-Calendar/"><i class="ti ti-calendar"></i> التقويم</a></li>
+                        <li><a href="https://Restudio-Education.github.io/al-awael-talent/"><i class="ti ti-star"></i> موهبتك</a></li>
+                        <li><a href="https://Restudio-Education.github.io/al-awael-Study-materials/"><i class="ti ti-book"></i> المواد الدراسية</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-group">
+                    <button type="button" class="nav-group-btn" aria-expanded="false">
+                        <i class="ti ti-messages"></i> التواصل الرسمي
+                        <i class="ti ti-chevron-down caret"></i>
+                    </button>
+                    <ul class="nav-dropdown">
+                        <li><a href="https://Restudio-Education.github.io/al-awael-messages/"><i class="ti ti-mail"></i> رسائل</a></li>
+                        <li><a href="https://Restudio-Education.github.io/al-awael-reports/"><i class="ti ti-flag"></i> البلاغات</a></li>
+                        <li><a href="#" id="aiToggleBtn"><i class="ti ti-robot"></i> التواصل مع الذكاء الاصطناعي</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-group">
+                    <button type="button" class="nav-group-btn" aria-expanded="false">
+                        <i class="ti ti-chart-pie"></i> الإحصائيات
+                        <i class="ti ti-chevron-down caret"></i>
+                    </button>
+                    <ul class="nav-dropdown">
+                        <li><a href="#"><i class="ti ti-id-badge"></i> بياناتي</a></li>
+                        <li><a href="#"><i class="ti ti-user-circle"></i> حسابي</a></li>
+                        <li><a href="https://Restudio-Education.github.io/al-awael-Reports/"><i class="ti ti-clipboard-check"></i> تقرير انضباط الطالب وتفاعله</a></li>
+                        <li><a href="https://Restudio-Education.github.io/al-awael-reports/"><i class="ti ti-flag"></i> البلاغات</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </nav>
@@ -1417,7 +757,7 @@
                     </div>
                     
                     <div class="caption-text">
-                        <i class="fas fa-globe"></i> استكشف ملايين المقالات والمصادر التعليمية المجانية
+                        <i class="ti ti-world"></i> استكشف ملايين المقالات والمصادر التعليمية المجانية
                     </div>
                 </div>
 
@@ -1428,44 +768,20 @@
                     </div>
                     <div class="courses-grid">
                         <a href="#" data-external="https://www.youtube.com/@IENTV" class="course-card external-link">
-                            <div class="course-image" style="background-color: #3498db;">
-                                <i class="fas fa-calculator"></i>
-                            </div>
-                            <div class="course-info">
-                                <h3>الرياضيات</h3>
-                                <div class="course-description">الرياضيات</div>
-                                <div class="youtube-link">قناة عين التعليمية</div>
-                            </div>
+                            <div class="course-image" style="background-color: #3498db;"><i class="ti ti-calculator"></i></div>
+                            <div class="course-info"><h3>الرياضيات</h3><div class="course-description">الرياضيات</div><div class="youtube-link">قناة عين التعليمية</div></div>
                         </a>
                         <a href="#" data-external="https://www.youtube.com/@IENTV" class="course-card external-link">
-                            <div class="course-image" style="background-color: #e74c3c;">
-                                <i class="fas fa-flask"></i>
-                            </div>
-                            <div class="course-info">
-                                <h3>العلوم</h3>
-                                <div class="course-description">العلوم</div>
-                                <div class="youtube-link">قناة عين التعليمية</div>
-                            </div>
+                            <div class="course-image" style="background-color: #e74c3c;"><i class="ti ti-flask"></i></div>
+                            <div class="course-info"><h3>العلوم</h3><div class="course-description">العلوم</div><div class="youtube-link">قناة عين التعليمية</div></div>
                         </a>
                         <a href="#" data-external="https://www.youtube.com/@IENTV" class="course-card external-link">
-                            <div class="course-image" style="background-color: #2ecc71;">
-                                <i class="fas fa-language"></i>
-                            </div>
-                            <div class="course-info">
-                                <h3>اللغة العربية</h3>
-                                <div class="course-description">اللغة العربية</div>
-                                <div class="youtube-link">قناة عين التعليمية</div>
-                            </div>
+                            <div class="course-image" style="background-color: #2ecc71;"><i class="ti ti-language"></i></div>
+                            <div class="course-info"><h3>اللغة العربية</h3><div class="course-description">اللغة العربية</div><div class="youtube-link">قناة عين التعليمية</div></div>
                         </a>
                         <a href="#" data-external="https://www.youtube.com/@IENTV" class="course-card external-link">
-                            <div class="course-image" style="background-color: #f39c12;">
-                                <i class="fas fa-globe"></i>
-                            </div>
-                            <div class="course-info">
-                                <h3>اللغة الإنجليزية</h3>
-                                <div class="course-description">الانجليزيه</div>
-                                <div class="youtube-link">قناة عين التعليمية</div>
-                            </div>
+                            <div class="course-image" style="background-color: #f39c12;"><i class="ti ti-world"></i></div>
+                            <div class="course-info"><h3>اللغة الإنجليزية</h3><div class="course-description">الانجليزيه</div><div class="youtube-link">قناة عين التعليمية</div></div>
                         </a>
                     </div>
                 </div>
@@ -1473,33 +789,17 @@
 
             <div class="sidebar sidebar-right">
                 <div class="card wordwall-games">
-                    <div class="card-header">
-                        <h2>ألعاب من Wordwall</h2>
-                    </div>
-                    <div class="game-item">
-                        <iframe style="max-width:100%" src="https://wordwall.net/ar/embed/69cb2d2927fc4d4ea3718133e5dbb06d?themeId=1&templateId=3&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div class="game-item">
-                        <iframe style="max-width:100%" src="https://wordwall.net/ar/embed/6f680f006ba24d91b447b696ec40ac72?themeId=1&templateId=8&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div class="game-item">
-                        <iframe style="max-width:100%" src="https://wordwall.net/ar/embed/6f8ef6a3af3f4a4d9fdd15c127f017db?themeId=1&templateId=3&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <a href="#" data-external="https://wordwall.net/ar" class="wordwall-link external-link" target="_blank">
-                        <span>المزيد من الألعاب</span>
-                    </a>
+                    <div class="card-header"><h2>ألعاب من Wordwall</h2></div>
+                    <div class="game-item"><iframe style="max-width:100%" src="https://wordwall.net/ar/embed/69cb2d2927fc4d4ea3718133e5dbb06d?themeId=1&templateId=3&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="game-item"><iframe style="max-width:100%" src="https://wordwall.net/ar/embed/6f680f006ba24d91b447b696ec40ac72?themeId=1&templateId=8&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="game-item"><iframe style="max-width:100%" src="https://wordwall.net/ar/embed/6f8ef6a3af3f4a4d9fdd15c127f017db?themeId=1&templateId=3&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe></div>
+                    <a href="#" data-external="https://wordwall.net/ar" class="wordwall-link external-link" target="_blank"><span>المزيد من الألعاب</span></a>
                 </div>
                 
                 <div class="card math-games">
-                    <div class="card-header">
-                        <h2>ألعاب الرياضيات</h2>
-                    </div>
-                    <div class="game-item">
-                        <iframe style="max-width:100%" src="https://wordwall.net/ar/embed/6c16dd2bbb7041f881438ab12f4419b6?themeId=1&templateId=5&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div class="game-item">
-                        <iframe style="max-width:100%" src="https://wordwall.net/ar/embed/73e4b03d0e944a9b9423610ba2ec995c?themeId=1&templateId=5&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    <div class="card-header"><h2>ألعاب الرياضيات</h2></div>
+                    <div class="game-item"><iframe style="max-width:100%" src="https://wordwall.net/ar/embed/6c16dd2bbb7041f881438ab12f4419b6?themeId=1&templateId=5&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="game-item"><iframe style="max-width:100%" src="https://wordwall.net/ar/embed/73e4b03d0e944a9b9423610ba2ec995c?themeId=1&templateId=5&fontStackId=0" width="100%" height="200" frameborder="0" allowfullscreen></iframe></div>
                 </div>
             </div>
         </div>
@@ -1509,53 +809,69 @@
         <div class="exit-modal-content">
             <img src="https://i.postimg.cc/667NrLqs/emergency-exit.png" alt="exit icon">
             <p>هل أنت متأكد من رغبتك في مغادرة المنصة؟</p>
-            <button class="confirm-exit-btn" id="confirmExitBtn">
-                <span class="material-symbols-outlined">logout</span>
-                تأكيد
-            </button>
+            <button class="confirm-exit-btn" id="confirmExitBtn"><i class="ti ti-logout"></i> تأكيد</button>
         </div>
     </div>
 
     <div id="supportModal" class="modal">
         <div class="modal-content">
-            <div class="modal-logo">
-                <img src="https://i.postimg.cc/Z0kPxqMN/email-(1).png" alt="الدعم الفني">
-            </div>
-            <div class="support-text">
-                للحصول على الدعم الفني، يرجى الاتصال بالرقم التالي:
-            </div>
-            <div class="support-phone">
-                +966 59 167 4555
-            </div>
+            <div class="modal-logo"><img src="https://i.postimg.cc/Z0kPxqMN/email-(1).png" alt="الدعم الفني"></div>
+            <div class="support-text">للحصول على الدعم الفني، يرجى التواصل عبر البريد الإلكتروني التالي:</div>
+            <a href="mailto:restudioeducation@gmail.com" class="support-phone">restudioeducation@gmail.com</a>
             <button class="close-modal" id="closeModalBtn">إغلاق</button>
         </div>
     </div>
 
     <div id="notificationModal" class="modal">
         <div class="modal-content">
-            <div class="modal-logo">
-                <img src="https://i.postimg.cc/bJ4RsLjj/email-(2).png" alt="إشعارات">
-            </div>
-            <div class="support-text">
-                يرجى التحقق من بريدك الإلكتروني للحصول على آخر التحديثات.
-            </div>
-            <a href="https://outlook.live.com" target="_blank" rel="noopener noreferrer" class="outlook-link-btn">
-                <i class="fas fa-envelope"></i>
-                افتح بريدي الإلكتروني في Outlook
-            </a>
-            <div class="notification-note">
-                <i class="fas fa-external-link-alt"></i> سيتم فتح Outlook في علامة تبويب جديدة
-            </div>
+            <div class="modal-logo"><img src="https://i.postimg.cc/bJ4RsLjj/email-(2).png" alt="إشعارات"></div>
+            <div class="support-text">يرجى التحقق من بريدك الإلكتروني للحصول على آخر التحديثات.</div>
+            <a href="https://outlook.live.com" target="_blank" rel="noopener noreferrer" class="outlook-link-btn"><i class="ti ti-mail"></i> افتح بريدي الإلكتروني في Outlook</a>
+            <div class="notification-note"><i class="ti ti-external-link"></i> سيتم فتح Outlook في علامة تبويب جديدة</div>
             <button class="close-modal" id="closeNotificationModalBtn">إغلاق</button>
         </div>
     </div>
 
+    <div id="aiPanelOverlay" class="ai-panel-overlay"></div>
+
+    <aside id="aiPanel" class="ai-panel" aria-hidden="true">
+        <div class="ai-panel-header">
+            <img src="https://i.postimg.cc/VkHGyJcP/swrh-restudio.png" alt="Nellsoft Logo">
+            <span class="top-bar-title">Nellsoft AI</span>
+            <button class="ai-close-btn" id="aiCloseBtn" title="إغلاق"><i class="ti ti-x"></i></button>
+        </div>
+
+        <div class="ai-warning" id="aiWarning">
+            <i class="ti ti-alert-triangle"></i>
+            <div class="ai-warning-content">
+                <strong>تحذير هام</strong>
+                يُرجى توخي الحذر الشديد عند التعامل أو التفاعل مع (Restudio Nellsoft AI)؛ إذ يتوجب تجنب الخوض في أي نقاشات حساسة، أو طرح مواضيع قد تنطوي على مخاطر أمنية أو فكرية. وفي حال كنت دون السن القانوني (أقل من 18 عاماً)، يُنصح بحصر استخدام هذه التقنية في الأغراض التعليمية فقط، مثل المراجعة الدراسية، أو طرح الأسئلة الأكاديمية التي تخدم مسيرتك التعليمية، مع الابتعاد تماماً عن أي حوارات جانبية غير آمنة.
+            </div>
+            <button class="ai-warning-close" id="aiWarningClose" title="إغلاق التحذير" aria-label="إغلاق التحذير">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+
+        <div class="ai-messages" id="aiMessages"></div>
+
+        <div class="ai-input-area">
+            <div class="tiptap-wrapper">
+                <div id="aiInput"></div>
+                <div class="tiptap-toolbar">
+                    <button type="button" class="tiptap-toolbar-btn" data-action="bold" title="عريض"><i class="ti ti-bold"></i></button>
+                    <button type="button" class="tiptap-toolbar-btn" data-action="italic" title="مائل"><i class="ti ti-italic"></i></button>
+                    <button type="button" class="tiptap-toolbar-btn" data-action="bulletList" title="قائمة نقطية"><i class="ti ti-list"></i></button>
+                    <button type="button" class="tiptap-toolbar-btn" data-action="orderedList" title="قائمة مرقمة"><i class="ti ti-list-numbers"></i></button>
+                </div>
+            </div>
+            <button class="ai-send-btn" id="aiSendBtn" title="إرسال"><i class="ti ti-send"></i></button>
+        </div>
+    </aside>
+
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="copyright">
-                    <p>جميع الحقوق محفوظة &copy; 2025 منصة متوسطة وثانوية الأوائل</p>
-                </div>
+                <div class="copyright"><p>جميع الحقوق محفوظة &copy; 2025 منصة متوسطة وثانوية الأوائل</p></div>
                 <div class="footer-logo">
                     <span class="made-by">صنع من:</span>
                     <img src="https://i.postimg.cc/c15jr87F/swrh-restudio-nskht-(2).png" alt="شعار المنصة">
@@ -1565,75 +881,322 @@
         </div>
     </footer>
 
+    <!-- ============ localforage ============ -->
+    <script src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"></script>
+
+    <!-- ============ مكتبة Glin Profanity ============ -->
+    <script type="module">
+      try {
+        const mod = await import('https://cdn.jsdelivr.net/npm/glin-profanity@3.3.0/dist/glin-profanity.min.js');
+        window.glinFilter = new mod.Filter({
+          languages: ['arabic', 'english'],
+          detectLeetspeak: true,
+          leetspeakLevel: 'moderate',
+          normalizeUnicode: true,
+          replaceWith: '***'
+        });
+        console.log('✅ Glin Profanity loaded successfully');
+      } catch (err) {
+        console.warn('⚠️ Glin Profanity failed to load:', err);
+        window.glinFilter = null;
+      }
+    </script>
+
+    <!-- ============ منتقي التاريخ العربي ============ -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // ========== إعدادات localStorage ==========
+    (function (global) {
+      'use strict';
+      var ARABIC_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+      var ARABIC_DAYS = ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
+      var activePicker = null;
+      function pad(n) { return String(n).padStart(2, '0'); }
+      function formatDate(date) { if (!date) return ''; return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()); }
+      function parseDate(str) { if (!str) return null; var m = String(str).match(/^(\d{4})-(\d{2})-(\d{2})$/); if (!m) return null; var d = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10)); return isNaN(d.getTime()) ? null : d; }
+      function sameDay(a, b) { return a && b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+
+      function ArabicDatepicker(element, options) {
+        if (!element) throw new Error('Datepicker: element is required');
+        this.element = element;
+        this.options = Object.assign({ format: 'yyyy-mm-dd' }, options || {});
+        this.selectedDate = parseDate(element.value);
+        this.viewDate = this.selectedDate ? new Date(this.selectedDate) : new Date();
+        this.dropdown = null;
+        this._onFocus = this._onFocus.bind(this);
+        this._onClickOutside = this._onClickOutside.bind(this);
+        this._onKeyDown = this._onKeyDown.bind(this);
+        this._onReposition = this._onReposition.bind(this);
+        element.addEventListener('focus', this._onFocus);
+        element.addEventListener('click', this._onFocus);
+        element.addEventListener('keydown', this._onKeyDown);
+        element._datepickerInstance = this;
+      }
+
+      ArabicDatepicker.prototype._onFocus = function () { if (activePicker && activePicker !== this) activePicker.hide(); this.show(); };
+      ArabicDatepicker.prototype._onClickOutside = function (e) { if (this.dropdown && !this.dropdown.contains(e.target) && e.target !== this.element) this.hide(); };
+      ArabicDatepicker.prototype._onKeyDown = function (e) { if (e.key === 'Escape') this.hide(); };
+      ArabicDatepicker.prototype._onReposition = function () { this._position(); };
+
+      ArabicDatepicker.prototype.show = function () {
+        if (this.dropdown) return;
+        if (activePicker && activePicker !== this) activePicker.hide();
+        activePicker = this;
+        this._buildDropdown();
+        this._render();
+        this._position();
+        document.addEventListener('mousedown', this._onClickOutside);
+        window.addEventListener('resize', this._onReposition);
+        window.addEventListener('scroll', this._onReposition, true);
+        this.element.dispatchEvent(new Event('show'));
+      };
+
+      ArabicDatepicker.prototype.hide = function () {
+        if (!this.dropdown) return;
+        document.removeEventListener('mousedown', this._onClickOutside);
+        window.removeEventListener('resize', this._onReposition);
+        window.removeEventListener('scroll', this._onReposition, true);
+        this.dropdown.remove();
+        this.dropdown = null;
+        if (activePicker === this) activePicker = null;
+        this.element.dispatchEvent(new Event('hide'));
+      };
+
+      ArabicDatepicker.prototype.destroy = function () {
+        this.hide();
+        this.element.removeEventListener('focus', this._onFocus);
+        this.element.removeEventListener('click', this._onFocus);
+        this.element.removeEventListener('keydown', this._onKeyDown);
+        delete this.element._datepickerInstance;
+      };
+
+      ArabicDatepicker.prototype._buildDropdown = function () {
+        var dd = document.createElement('div');
+        dd.className = 'datepicker-dropdown';
+        dd.dir = 'rtl';
+        var header = document.createElement('div');
+        header.className = 'datepicker-header';
+        var prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.className = 'datepicker-prev';
+        prevBtn.setAttribute('aria-label', 'الشهر السابق');
+        prevBtn.innerHTML = '&#10095;';
+        prevBtn.addEventListener('click', function (e) { e.preventDefault(); this.viewDate.setMonth(this.viewDate.getMonth() - 1); this._render(); }.bind(this));
+        var nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = 'datepicker-next';
+        nextBtn.setAttribute('aria-label', 'الشهر التالي');
+        nextBtn.innerHTML = '&#10094;';
+        nextBtn.addEventListener('click', function (e) { e.preventDefault(); this.viewDate.setMonth(this.viewDate.getMonth() + 1); this._render(); }.bind(this));
+        var monthYear = document.createElement('div');
+        monthYear.className = 'datepicker-title';
+        this.monthYearEl = monthYear;
+        header.appendChild(prevBtn);
+        header.appendChild(monthYear);
+        header.appendChild(nextBtn);
+        dd.appendChild(header);
+        var weekHeader = document.createElement('div');
+        weekHeader.className = 'datepicker-weekdays';
+        for (var i = 0; i < ARABIC_DAYS.length; i++) { var cell = document.createElement('span'); cell.textContent = ARABIC_DAYS[i]; weekHeader.appendChild(cell); }
+        dd.appendChild(weekHeader);
+        var grid = document.createElement('div');
+        grid.className = 'datepicker-grid';
+        this.gridEl = grid;
+        dd.appendChild(grid);
+        var footer = document.createElement('div');
+        footer.className = 'datepicker-footer';
+        var todayBtn = document.createElement('button');
+        todayBtn.type = 'button';
+        todayBtn.className = 'datepicker-today';
+        todayBtn.textContent = 'اليوم';
+        todayBtn.addEventListener('click', function (e) { e.preventDefault(); var today = new Date(); this.selectedDate = today; this.viewDate = new Date(today); this._commit(); this._render(); }.bind(this));
+        var clearBtn = document.createElement('button');
+        clearBtn.type = 'button';
+        clearBtn.className = 'datepicker-clear';
+        clearBtn.textContent = 'مسح';
+        clearBtn.addEventListener('click', function (e) { e.preventDefault(); this.selectedDate = null; this._commit(); this._render(); }.bind(this));
+        footer.appendChild(todayBtn);
+        footer.appendChild(clearBtn);
+        dd.appendChild(footer);
+        document.body.appendChild(dd);
+        this.dropdown = dd;
+      };
+
+      ArabicDatepicker.prototype._position = function () {
+        if (!this.dropdown) return;
+        var rect = this.element.getBoundingClientRect();
+        var ddRect = this.dropdown.getBoundingClientRect();
+        var winW = window.innerWidth;
+        var winH = window.innerHeight;
+        var top = rect.bottom + 6;
+        var left = rect.left;
+        if (left + ddRect.width > winW - 8) left = winW - ddRect.width - 8;
+        if (left < 8) left = 8;
+        if (top + ddRect.height > winH - 8) { var topAbove = rect.top - ddRect.height - 6; if (topAbove > 8) top = topAbove; else top = Math.max(8, winH - ddRect.height - 8); }
+        this.dropdown.style.position = 'absolute';
+        this.dropdown.style.top = (window.scrollY + top) + 'px';
+        this.dropdown.style.left = (window.scrollX + left) + 'px';
+      };
+
+      ArabicDatepicker.prototype._render = function () {
+        if (!this.dropdown) return;
+        var view = this.viewDate;
+        var year = view.getFullYear();
+        var month = view.getMonth();
+        this.monthYearEl.textContent = ARABIC_MONTHS[month] + ' ' + year;
+        var grid = this.gridEl;
+        grid.innerHTML = '';
+        var firstDay = new Date(year, month, 1);
+        var startDayOfWeek = firstDay.getDay();
+        var daysInMonth = new Date(year, month + 1, 0).getDate();
+        var prevMonthDays = new Date(year, month, 0).getDate();
+        var today = new Date();
+        var i, d, cell, date;
+        for (i = startDayOfWeek - 1; i >= 0; i--) { cell = this._makeCell(prevMonthDays - i, year, month - 1, true); grid.appendChild(cell); }
+        for (d = 1; d <= daysInMonth; d++) { date = new Date(year, month, d); cell = this._makeCell(d, year, month, false); if (sameDay(date, today)) cell.classList.add('today'); if (this.selectedDate && sameDay(date, this.selectedDate)) cell.classList.add('selected'); grid.appendChild(cell); }
+        var totalCells = grid.children.length;
+        var remainder = totalCells % 7;
+        if (remainder !== 0) { var toAdd = 7 - remainder; for (i = 1; i <= toAdd; i++) { cell = this._makeCell(i, year, month + 1, true); grid.appendChild(cell); } }
+      };
+
+      ArabicDatepicker.prototype._makeCell = function (dayNum, year, month, isOutside) {
+        var cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'datepicker-cell';
+        if (isOutside) cell.classList.add('outside');
+        cell.textContent = dayNum;
+        var date = new Date(year, month, dayNum);
+        cell.addEventListener('click', function (e) { e.preventDefault(); this.selectedDate = date; this.viewDate = new Date(date); this._commit(); this._render(); this.hide(); }.bind(this));
+        return cell;
+      };
+
+      ArabicDatepicker.prototype._commit = function () {
+        var value = this.selectedDate ? formatDate(this.selectedDate) : '';
+        this.element.value = value;
+        this.element.dispatchEvent(new Event('input', { bubbles: true }));
+        this.element.dispatchEvent(new Event('change', { bubbles: true }));
+        var evt = new CustomEvent('changeDate', { bubbles: true, detail: { date: this.selectedDate ? new Date(this.selectedDate) : null } });
+        this.element.dispatchEvent(evt);
+      };
+
+      global.Datepicker = ArabicDatepicker;
+      global.ArabicDatepicker = ArabicDatepicker;
+    })(window);
+    </script>
+
+    <!-- ============ السكربت الرئيسي ============ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
             const STORAGE_KEY = 'alawael_user_profile';
-            
-            function getProfile() {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) {
-                    try {
-                        return JSON.parse(saved);
-                    } catch(e) {
-                        return getDefaultProfile();
-                    }
-                }
+            const STUDENT_KEY = 'alawael_student_data';
+            const AI_HISTORY_KEY = 'alawael_ai_chat_history';
+            const DEFAULT_STAGE = 'متوسطة';
+            const SUPPORT_EMAIL = 'restudiosupport@gmail.com';
+
+            const AUTO_NOTICE_MESSAGE = `
+                <div class="auto-notice">
+                    <div class="notice-header">
+                        <i class="ti ti-info-circle"></i>
+                        <strong>تنبيه تلقائي من منصة Nellsoft</strong>
+                    </div>
+                    <div class="notice-greeting">
+                        <i class="ti ti-users"></i>
+                        عزيزي المعلم / الطالب،
+                    </div>
+                    <p>
+                        نود إفادتكم بأن المساعد <strong>Nellsoft</strong> ما زالت في طور التطوير الأولي والتجريبي. ونظرًا للاعتماد على النموذج الذكي <code>qwen2.5:0.5b</code> في هذه المرحلة الناشئة، فقد تلاحظون أحيانًا ظهور إجابات غير دقيقة، أو صياغات قد تبدو غريبة وغير متسقة مع المنطق العلمي واللغوي.
+                    </p>
+                    <div class="notice-highlight">
+                        <i class="ti ti-alert-circle" style="color:#d97706;font-size:14px;"></i>
+                        بناءً على ذلك، نرجو منكم التعامل مع المخرجات بحذر، ومراجعة الإجابات والتحقق من صحتها قبل اعتمادها.
+                    </div>
+                    <p>
+                        وفي حال رصدكم لأي خطأ أو استجابة غير منطقية، يسعدنا جدًا قيامكم بالضغط على <strong>"زر الإبلاغ"</strong> المتوفر أسفل كل رسالة؛ حيث تساهم تقاريركم بشكل مباشر في تحسين أداء النموذج وتطوير المنصة مستقبلاً.
+                    </p>
+                    <div class="notice-thanks">
+                        <i class="ti ti-heart-handshake"></i>
+                        شاكرين لكم تفهمكم ودعمكم المستمر لرحلتنا التعليمية والتقنية.
+                    </div>
+                </div>
+            `;
+
+            if (typeof localforage === 'undefined') {
+                console.error('❌ localforage غير محمّل!');
+                return;
+            }
+            localforage.config({
+                name: 'AlAwaelPlatform',
+                storeName: 'alawael_store',
+                description: 'بيانات منصة متوسطة وثانوية الأوائل'
+            });
+            console.log('✅ localforage initialized');
+
+            async function storageGet(key, fallback) {
+                try {
+                    const value = await localforage.getItem(key);
+                    return value !== null && value !== undefined ? value : fallback;
+                } catch (err) { console.warn('storageGet failed:', key, err); return fallback; }
+            }
+            async function storageSet(key, value) {
+                try { await localforage.setItem(key, value); } catch (err) { console.warn('storageSet failed:', key, err); }
+            }
+            async function storageRemove(key) {
+                try { await localforage.removeItem(key); } catch (err) { console.warn('storageRemove failed:', key, err); }
+            }
+
+            function getSchoolNameByStage(stage) { return (stage === 'ثانوية') ? 'ثانوية الأوائل بأبها' : 'متوسطة الأوائل بأبها'; }
+            function getDefaultProfile() { return { name: 'مستخدم لمنصة الأوائل', email: '', avatar: '', stage: DEFAULT_STAGE, school: getSchoolNameByStage(DEFAULT_STAGE) }; }
+
+            async function getProfile() {
+                const saved = await storageGet(STORAGE_KEY, null);
+                if (saved && typeof saved === 'object') return saved;
                 return getDefaultProfile();
             }
-            
-            function getDefaultProfile() {
-                return {
-                    name: 'مستخدم لمنصة الأوائل',
-                    email: '',
-                    avatar: '' // فارغ = الأيقونة الافتراضية
-                };
-            }
-            
-            function saveProfile(profile) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
-            }
-            
-            let currentProfile = getProfile();
+            async function saveProfile(profile) { await storageSet(STORAGE_KEY, profile); }
+
+            let currentProfile = await getProfile();
             let selectedAvatar = currentProfile.avatar || '';
+            if (!currentProfile.stage) currentProfile.stage = DEFAULT_STAGE;
             
-            // ========== تحديث واجهة المستخدم ==========
             function updateAllUI() {
-                // تحديث الاسم في الهيدر
                 const headerUsername = document.getElementById('headerUsername');
-                if (headerUsername) {
-                    headerUsername.textContent = currentProfile.name;
-                }
-                
-                // تحديث رسالة الترحيب
+                if (headerUsername) headerUsername.textContent = currentProfile.name;
                 const welcomeMessage = document.getElementById('welcomeMessage');
-                if (welcomeMessage) {
-                    welcomeMessage.textContent = `مَرْحَبًا بِكَ, ${currentProfile.name}!`;
-                }
-                
-                // تحديث الأفاتار في الهيدر
+                if (welcomeMessage) welcomeMessage.textContent = `مَرْحَبًا بِكَ, ${currentProfile.name}!`;
                 updateHeaderAvatar();
-                
-                // تحديث محتوى البوب أب
                 updatePopupFields();
+                updateStageUI();
+            }
+
+            function updateStageUI() {
+                const stageSelect = document.getElementById('stageSelect');
+                const schoolNameDisplay = document.getElementById('schoolNameDisplay');
+                const talentNote = document.getElementById('talentNote');
+                const stage = currentProfile.stage || DEFAULT_STAGE;
+                const schoolName = getSchoolNameByStage(stage);
+                if (stageSelect) stageSelect.value = stage;
+                if (schoolNameDisplay) schoolNameDisplay.textContent = schoolName;
+                if (talentNote) talentNote.textContent = 'إذا انتهيت من تسجيل موهبتك أو هوايتك، يُرجى التحدث إلى مشرف الموهوبين في مدرسة الأوائل ' + (stage === 'ثانوية' ? 'الثانوية' : 'المتوسطة') + ' بأبها.';
+                currentProfile.school = schoolName;
+            }
+
+            const stageSelectEl = document.getElementById('stageSelect');
+            if (stageSelectEl) {
+                stageSelectEl.addEventListener('change', async function() {
+                    currentProfile.stage = this.value;
+                    currentProfile.school = getSchoolNameByStage(this.value);
+                    await saveProfile(currentProfile);
+                    updateStageUI();
+                });
             }
             
             function updateHeaderAvatar() {
                 const headerDefaultIcon = document.getElementById('headerDefaultIcon');
                 const headerAvatarImg = document.getElementById('headerAvatarImg');
-                
                 if (currentProfile.avatar) {
                     if (headerDefaultIcon) headerDefaultIcon.style.display = 'none';
-                    if (headerAvatarImg) {
-                        headerAvatarImg.src = currentProfile.avatar;
-                        headerAvatarImg.style.display = 'block';
-                    }
+                    if (headerAvatarImg) { headerAvatarImg.src = currentProfile.avatar; headerAvatarImg.style.display = 'block'; }
                 } else {
                     if (headerDefaultIcon) headerDefaultIcon.style.display = 'block';
-                    if (headerAvatarImg) {
-                        headerAvatarImg.src = '';
-                        headerAvatarImg.style.display = 'none';
-                    }
+                    if (headerAvatarImg) { headerAvatarImg.src = ''; headerAvatarImg.style.display = 'none'; }
                 }
             }
             
@@ -1642,12 +1205,10 @@
                 const displayEmail = document.getElementById('displayEmail');
                 const editNameInput = document.getElementById('editNameInput');
                 const editEmailInput = document.getElementById('editEmailInput');
-                
                 if (displayName) displayName.textContent = currentProfile.name;
                 if (displayEmail) displayEmail.textContent = currentProfile.email || '';
                 if (editNameInput) editNameInput.value = currentProfile.name;
                 if (editEmailInput) editEmailInput.value = currentProfile.email || '';
-                
                 updatePopupAvatar();
                 highlightSelectedAvatar();
             }
@@ -1655,51 +1216,33 @@
             function updatePopupAvatar() {
                 const defaultAvatarIcon = document.getElementById('defaultAvatarIcon');
                 const profileImagePopup = document.getElementById('profileImagePopup');
-                
                 if (currentProfile.avatar) {
                     if (defaultAvatarIcon) defaultAvatarIcon.style.display = 'none';
-                    if (profileImagePopup) {
-                        profileImagePopup.src = currentProfile.avatar;
-                        profileImagePopup.style.display = 'block';
-                    }
+                    if (profileImagePopup) { profileImagePopup.src = currentProfile.avatar; profileImagePopup.style.display = 'block'; }
                 } else {
                     if (defaultAvatarIcon) defaultAvatarIcon.style.display = 'block';
-                    if (profileImagePopup) {
-                        profileImagePopup.src = '';
-                        profileImagePopup.style.display = 'none';
-                    }
+                    if (profileImagePopup) { profileImagePopup.src = ''; profileImagePopup.style.display = 'none'; }
                 }
             }
             
             function highlightSelectedAvatar() {
-                const avatarOptions = document.querySelectorAll('.avatar-option');
-                avatarOptions.forEach(opt => {
-                    if (opt.getAttribute('data-avatar') === selectedAvatar) {
-                        opt.classList.add('selected');
-                    } else {
-                        opt.classList.remove('selected');
-                    }
+                document.querySelectorAll('.avatar-option').forEach(opt => {
+                    if (opt.getAttribute('data-avatar') === selectedAvatar) opt.classList.add('selected');
+                    else opt.classList.remove('selected');
                 });
             }
             
-            // ========== اختيار الأفاتار ==========
             window.selectAvatar = function(element) {
                 selectedAvatar = element.getAttribute('data-avatar');
                 highlightSelectedAvatar();
-                
-                // معاينة فورية في البوب أب
                 const defaultAvatarIcon = document.getElementById('defaultAvatarIcon');
                 const profileImagePopup = document.getElementById('profileImagePopup');
                 if (selectedAvatar) {
                     if (defaultAvatarIcon) defaultAvatarIcon.style.display = 'none';
-                    if (profileImagePopup) {
-                        profileImagePopup.src = selectedAvatar;
-                        profileImagePopup.style.display = 'block';
-                    }
+                    if (profileImagePopup) { profileImagePopup.src = selectedAvatar; profileImagePopup.style.display = 'block'; }
                 }
             };
             
-            // ========== رفع صورة من الجهاز ==========
             const fileUploadInput = document.getElementById('fileUploadInput');
             if (fileUploadInput) {
                 fileUploadInput.addEventListener('change', function(e) {
@@ -1708,106 +1251,188 @@
                         const reader = new FileReader();
                         reader.onload = function(event) {
                             selectedAvatar = event.target.result;
-                            // إزالة التحديد عن الصور المسبقة
                             document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
-                            // تحديث المعاينة
                             const defaultAvatarIcon = document.getElementById('defaultAvatarIcon');
                             const profileImagePopup = document.getElementById('profileImagePopup');
                             if (defaultAvatarIcon) defaultAvatarIcon.style.display = 'none';
-                            if (profileImagePopup) {
-                                profileImagePopup.src = selectedAvatar;
-                                profileImagePopup.style.display = 'block';
-                            }
+                            if (profileImagePopup) { profileImagePopup.src = selectedAvatar; profileImagePopup.style.display = 'block'; }
                         };
                         reader.readAsDataURL(file);
-                    } else {
-                        alert('الرجاء اختيار ملف صورة صالح.');
-                    }
+                    } else { alert('الرجاء اختيار ملف صورة صالح.'); }
                 });
             }
             
-            // ========== حفظ التغييرات ==========
             const saveProfileBtn = document.getElementById('saveProfileBtn');
             const saveSuccess = document.getElementById('saveSuccess');
             
             if (saveProfileBtn) {
-                saveProfileBtn.addEventListener('click', function() {
+                saveProfileBtn.addEventListener('click', async function() {
                     const editNameInput = document.getElementById('editNameInput');
                     const editEmailInput = document.getElementById('editEmailInput');
-                    
                     const newName = editNameInput ? editNameInput.value.trim() : '';
                     const newEmail = editEmailInput ? editEmailInput.value.trim() : '';
-                    
-                    if (!newName) {
-                        alert('الرجاء إدخال اسم المستخدم.');
-                        return;
-                    }
-                    
-                    // تحديث الملف الشخصي
+                    if (!newName) { alert('الرجاء إدخال اسم المستخدم.'); return; }
                     currentProfile.name = newName;
                     currentProfile.email = newEmail;
                     currentProfile.avatar = selectedAvatar;
-                    
-                    // حفظ في localStorage
-                    saveProfile(currentProfile);
-                    
-                    // تحديث واجهة المستخدم
+                    currentProfile.school = getSchoolNameByStage(currentProfile.stage || DEFAULT_STAGE);
+                    await saveProfile(currentProfile);
                     updateAllUI();
-                    
-                    // إظهار رسالة النجاح
-                    if (saveSuccess) {
-                        saveSuccess.style.display = 'block';
-                        setTimeout(() => {
-                            saveSuccess.style.display = 'none';
-                        }, 2000);
-                    }
+                    if (saveSuccess) { saveSuccess.style.display = 'block'; setTimeout(() => { saveSuccess.style.display = 'none'; }, 2000); }
                 });
             }
             
-            // ========== النقر على الأفاتار في البوب أب لفتح رفع الملفات ==========
             const profileCirclePopup = document.getElementById('profileCirclePopup');
-            if (profileCirclePopup && fileUploadInput) {
-                profileCirclePopup.addEventListener('click', function() {
-                    fileUploadInput.click();
+            if (profileCirclePopup && fileUploadInput) { profileCirclePopup.addEventListener('click', function() { fileUploadInput.click(); }); }
+            
+            updateAllUI();
+
+            async function getStudentData() {
+                const saved = await storageGet(STUDENT_KEY, null);
+                if (saved && typeof saved === 'object') {
+                    return {
+                        skills: saved.skills || '',
+                        courses: Array.isArray(saved.courses) ? saved.courses : [],
+                        sports: saved.sports || '',
+                        hobbies: saved.hobbies || ''
+                    };
+                }
+                return { skills: '', courses: [], sports: '', hobbies: '' };
+            }
+
+            async function saveStudentData(data) { await storageSet(STUDENT_KEY, data); }
+
+            let studentData = await getStudentData();
+            let datepickerInstances = [];
+
+            function destroyDatepickers() { datepickerInstances.forEach(function(dp) { try { dp.destroy(); } catch (e) {} }); datepickerInstances = []; }
+
+            function initDatepickers() {
+                destroyDatepickers();
+                const inputs = document.querySelectorAll('#coursesContainer input.datepicker');
+                if (!inputs.length) return;
+                if (typeof Datepicker === 'undefined') { inputs.forEach(function(inp) { inp.type = 'date'; inp.readOnly = false; }); return; }
+                inputs.forEach(function(inp) { const dp = new Datepicker(inp, { format: 'yyyy-mm-dd' }); datepickerInstances.push(dp); });
+            }
+
+            function makeCourseField(labelText, type, value, onInput, placeholder) {
+                const wrap = document.createElement('div');
+                wrap.className = 'course-field';
+                const label = document.createElement('label');
+                label.textContent = labelText;
+                const input = document.createElement('input');
+                if (type === 'date') { input.type = 'text'; input.className = 'datepicker'; input.readOnly = true; input.autocomplete = 'off'; input.placeholder = 'اختر التاريخ'; }
+                else { input.type = type; if (placeholder) input.placeholder = placeholder; if (type === 'number') { input.min = '1'; input.step = '1'; } }
+                input.value = value || '';
+                input.addEventListener('input', function(e) { onInput(e.target.value); });
+                input.addEventListener('changeDate', function(e) { onInput(e.target.value); });
+                wrap.appendChild(label);
+                wrap.appendChild(input);
+                return wrap;
+            }
+
+            function renderCourses() {
+                const container = document.getElementById('coursesContainer');
+                if (!container) return;
+                container.innerHTML = '';
+                if (!studentData.courses.length) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'no-courses-wrapper';
+                    const icon = document.createElement('img');
+                    icon.className = 'no-courses-icon';
+                    icon.src = 'https://i.postimg.cc/P5bjHGM8/online-teaching.png';
+                    icon.alt = 'لا توجد دورات';
+                    wrapper.appendChild(icon);
+                    const empty = document.createElement('p');
+                    empty.className = 'no-courses';
+                    empty.textContent = 'لا توجد دورات مضافة حاليًا';
+                    wrapper.appendChild(empty);
+                    container.appendChild(wrapper);
+                    initDatepickers();
+                    return;
+                }
+                studentData.courses.forEach(function(course, index) {
+                    const item = document.createElement('div');
+                    item.className = 'course-item';
+                    const header = document.createElement('div');
+                    header.className = 'course-item-header';
+                    const title = document.createElement('span');
+                    title.textContent = 'دورة ' + (index + 1);
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'remove-course-btn';
+                    removeBtn.innerHTML = '<i class="ti ti-trash"></i> حذف';
+                    removeBtn.addEventListener('click', function() { studentData.courses.splice(index, 1); saveStudentData(studentData); renderCourses(); });
+                    header.appendChild(title);
+                    header.appendChild(removeBtn);
+                    item.appendChild(header);
+                    item.appendChild(makeCourseField('عنوان الدورة *', 'text', course.title, function(v) { studentData.courses[index].title = v; }, 'مثال: دورة البرمجة'));
+                    item.appendChild(makeCourseField('اسم المركز *', 'text', course.center, function(v) { studentData.courses[index].center = v; }, 'مثال: مركز أبها'));
+                    item.appendChild(makeCourseField('تاريخ الدورة *', 'date', course.date, function(v) { studentData.courses[index].date = v; }, ''));
+                    item.appendChild(makeCourseField('مدة الدورة (بالأيام) *', 'number', course.duration, function(v) { studentData.courses[index].duration = v; }, 'مثال: 5'));
+                    container.appendChild(item);
+                });
+                initDatepickers();
+            }
+
+            function fillStudentFields() {
+                const skillsInput = document.getElementById('skillsInput');
+                const sportsInput = document.getElementById('sportsInput');
+                const hobbiesInput = document.getElementById('hobbiesInput');
+                if (skillsInput) skillsInput.value = studentData.skills || '';
+                if (sportsInput) sportsInput.value = studentData.sports || '';
+                if (hobbiesInput) hobbiesInput.value = studentData.hobbies || '';
+                renderCourses();
+            }
+
+            const addCourseBtn = document.getElementById('addCourseBtn');
+            if (addCourseBtn) {
+                addCourseBtn.addEventListener('click', function() { studentData.courses.push({ title: '', center: '', date: '', duration: '' }); renderCourses(); });
+            }
+
+            const saveStudentBtn = document.getElementById('saveStudentBtn');
+            const saveStudentSuccess = document.getElementById('saveStudentSuccess');
+
+            if (saveStudentBtn) {
+                saveStudentBtn.addEventListener('click', async function() {
+                    const skillsInput = document.getElementById('skillsInput');
+                    const sportsInput = document.getElementById('sportsInput');
+                    const hobbiesInput = document.getElementById('hobbiesInput');
+                    studentData.skills = skillsInput ? skillsInput.value.trim() : '';
+                    studentData.sports = sportsInput ? sportsInput.value.trim() : '';
+                    studentData.hobbies = hobbiesInput ? hobbiesInput.value.trim() : '';
+                    const incomplete = studentData.courses.find(function(c) { return !String(c.title || '').trim() || !String(c.center || '').trim() || !String(c.date || '').trim() || !String(c.duration || '').trim(); });
+                    if (incomplete) { alert('الرجاء إكمال جميع الحقول الإلزامية (*) في الدورات التعليمية.'); return; }
+                    await saveStudentData(studentData);
+                    if (saveStudentSuccess) { saveStudentSuccess.style.display = 'block'; setTimeout(function() { saveStudentSuccess.style.display = 'none'; }, 2000); }
                 });
             }
-            
-            // ========== تحديث أولي ==========
-            updateAllUI();
-            
-            // ========== إخفاء شاشة التحميل ==========
+
+            fillStudentFields();
+
             const loadingScreen = document.getElementById('loadingScreen');
             if (loadingScreen) {
-                setTimeout(() => {
-                    loadingScreen.classList.add('hide');
-                    setTimeout(() => {
-                        loadingScreen.remove();
-                    }, 500);
-                }, 2000);
+                setTimeout(() => { loadingScreen.classList.add('hide'); setTimeout(() => { loadingScreen.remove(); }, 500); }, 2000);
             }
             
-            // ========== مربع الحساب ==========
             const accountWrapper = document.getElementById('accountWrapper');
             const accountSkeleton = document.getElementById('accountSkeleton');
             const accountBox = document.getElementById('accountBox');
             const profileBtn = document.getElementById('profileBtn');
             
             if (profileBtn) {
-                profileBtn.addEventListener('click', function() {
+                profileBtn.addEventListener('click', async function() {
                     if (accountWrapper) {
-                        // تحديث البيانات قبل الفتح
-                        currentProfile = getProfile();
+                        currentProfile = await getProfile();
+                        if (!currentProfile.stage) currentProfile.stage = DEFAULT_STAGE;
                         selectedAvatar = currentProfile.avatar || '';
                         updateAllUI();
-                        
+                        studentData = await getStudentData();
+                        fillStudentFields();
                         accountWrapper.style.display = 'flex';
                         if (accountSkeleton) accountSkeleton.style.display = 'block';
                         if (accountBox) accountBox.style.display = 'none';
-                        
-                        setTimeout(() => {
-                            if (accountSkeleton) accountSkeleton.style.display = 'none';
-                            if (accountBox) accountBox.style.display = 'block';
-                        }, 1000);
+                        setTimeout(() => { if (accountSkeleton) accountSkeleton.style.display = 'none'; if (accountBox) accountBox.style.display = 'block'; }, 1000);
                     }
                 });
             }
@@ -1817,10 +1442,8 @@
                 closeAccountBtn.addEventListener('click', function() {
                     if (accountWrapper) {
                         accountWrapper.style.display = 'none';
-                        setTimeout(() => {
-                            if (accountSkeleton) accountSkeleton.style.display = 'block';
-                            if (accountBox) accountBox.style.display = 'none';
-                        }, 300);
+                        destroyDatepickers();
+                        setTimeout(() => { if (accountSkeleton) accountSkeleton.style.display = 'block'; if (accountBox) accountBox.style.display = 'none'; }, 300);
                     }
                 });
             }
@@ -1829,48 +1452,24 @@
                 accountWrapper.addEventListener('click', function(e) {
                     if (e.target === accountWrapper) {
                         accountWrapper.style.display = 'none';
-                        setTimeout(() => {
-                            if (accountSkeleton) accountSkeleton.style.display = 'block';
-                            if (accountBox) accountBox.style.display = 'none';
-                        }, 300);
+                        destroyDatepickers();
+                        setTimeout(() => { if (accountSkeleton) accountSkeleton.style.display = 'block'; if (accountBox) accountBox.style.display = 'none'; }, 300);
                     }
                 });
             }
             
-            // ========== الروابط الخارجية وشاشة التأكيد ==========
             let pendingUrl = null;
             const exitModal = document.getElementById('exitModal');
             const confirmExitBtn = document.getElementById('confirmExitBtn');
             
-            function showExitModal(url) {
-                pendingUrl = url;
-                exitModal.style.display = 'flex';
-            }
+            function showExitModal(url) { pendingUrl = url; exitModal.style.display = 'flex'; }
+            function hideExitModal() { exitModal.style.display = 'none'; pendingUrl = null; }
+            function confirmExit() { if (pendingUrl) { window.open(pendingUrl, '_blank'); hideExitModal(); } }
             
-            function hideExitModal() {
-                exitModal.style.display = 'none';
-                pendingUrl = null;
-            }
+            if (exitModal) { exitModal.addEventListener('click', function(e) { if (e.target === exitModal) hideExitModal(); }); }
+            if (confirmExitBtn) confirmExitBtn.addEventListener('click', confirmExit);
             
-            function confirmExit() {
-                if (pendingUrl) {
-                    window.open(pendingUrl, '_blank');
-                    hideExitModal();
-                }
-            }
-            
-            if (exitModal) {
-                exitModal.addEventListener('click', function(e) {
-                    if (e.target === exitModal) hideExitModal();
-                });
-            }
-            
-            if (confirmExitBtn) {
-                confirmExitBtn.addEventListener('click', confirmExit);
-            }
-            
-            const externalLinks = document.querySelectorAll('.external-link');
-            externalLinks.forEach(link => {
+            document.querySelectorAll('.external-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const url = this.getAttribute('data-external');
@@ -1878,28 +1477,34 @@
                 });
             });
             
-            // ========== القائمة المنسدلة ==========
             const appsBtn = document.getElementById('appsDropdownBtn');
             const dropdownMenu = document.getElementById('appsDropdownMenu');
             
             if (appsBtn && dropdownMenu) {
-                appsBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dropdownMenu.classList.toggle('show-dropdown');
-                });
-                
-                window.addEventListener('click', function(e) {
-                    if (!appsBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                        dropdownMenu.classList.remove('show-dropdown');
-                    }
-                });
-                
-                dropdownMenu.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
+                appsBtn.addEventListener('click', function(e) { e.stopPropagation(); dropdownMenu.classList.toggle('show-dropdown'); });
+                window.addEventListener('click', function(e) { if (!appsBtn.contains(e.target) && !dropdownMenu.contains(e.target)) dropdownMenu.classList.remove('show-dropdown'); });
+                dropdownMenu.addEventListener('click', function(e) { e.stopPropagation(); });
             }
             
-            // ========== مودال الدعم الفني ==========
+            const navGroups = document.querySelectorAll('.nav-group');
+            
+            function closeAllNavGroups() { navGroups.forEach(g => { g.classList.remove('open'); const b = g.querySelector('.nav-group-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }); }
+            
+            navGroups.forEach(group => {
+                const btn = group.querySelector('.nav-group-btn');
+                if (!btn) return;
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = group.classList.contains('open');
+                    closeAllNavGroups();
+                    if (!isOpen) { group.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+                });
+            });
+            
+            document.addEventListener('click', function(e) { if (!e.target.closest('.nav-group')) closeAllNavGroups(); });
+            document.querySelectorAll('.nav-dropdown a').forEach(a => { a.addEventListener('click', closeAllNavGroups); });
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAllNavGroups(); });
+            
             const supportBtn = document.getElementById('supportBtn');
             const supportModal = document.getElementById('supportModal');
             const closeModalBtn = document.getElementById('closeModalBtn');
@@ -1909,13 +1514,8 @@
             
             if (supportBtn) supportBtn.addEventListener('click', openModal);
             if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-            if (supportModal) {
-                supportModal.addEventListener('click', function(e) {
-                    if (e.target === supportModal) closeModal();
-                });
-            }
+            if (supportModal) { supportModal.addEventListener('click', function(e) { if (e.target === supportModal) closeModal(); }); }
             
-            // ========== مودال الإشعارات ==========
             const notificationBtn = document.getElementById('notificationBtn');
             const notificationModal = document.getElementById('notificationModal');
             const closeNotificationBtn = document.getElementById('closeNotificationModalBtn');
@@ -1923,14 +1523,562 @@
             function openNotificationModal() { if (notificationModal) notificationModal.style.display = 'flex'; }
             function closeNotificationModal() { if (notificationModal) notificationModal.style.display = 'none'; }
             
-            if (notificationBtn) notificationBtn.addEventListener('click', openNotificationModal);
+            // ✅ زر الإشعارات مربوط من graph-api.js
+            // if (notificationBtn) notificationBtn.addEventListener('click', openNotificationModal);
             if (closeNotificationBtn) closeNotificationBtn.addEventListener('click', closeNotificationModal);
-            if (notificationModal) {
-                notificationModal.addEventListener('click', function(e) {
-                    if (e.target === notificationModal) closeNotificationModal();
+            if (notificationModal) { notificationModal.addEventListener('click', function(e) { if (e.target === notificationModal) closeNotificationModal(); }); }
+
+            const LOCAL_RULES = {
+                politics: ['سياس', 'حكوم', 'رئيس الجمهورية', 'رئاس', 'انتخاب', 'حزب', 'أحزاب', 'معارض', 'انقلاب', 'ثورة', 'مظاهر', 'ديمقراط', 'ديكتاتور', 'طاغية', 'برلمان', 'وزار', 'وزير', 'ملك', 'أمير', 'خليف', 'إمار', 'خلاف', 'جمهور', 'ملكي', 'سلط', 'نظام الحكم', 'احتجاج', 'فساد سياسي', 'صراع سياسي', 'صراعات سياسية', 'أزمة سياسية', 'حرب أهلية', 'قضية سياسية', 'موقف سياسي', 'تحليل سياسي', 'رأي سياسي', 'politic', 'government', 'president', 'election', 'parliament', 'revolution', 'protest', 'democracy', 'dictator', 'regime', 'coup', 'political', 'politics'],
+                danger: ['قنبل', 'سلاح', 'أسلح', 'تفجير', 'قتل', 'أقتل', 'اقتل', 'ذبح', 'مخدر', 'تهريب', 'إرهاب', 'ارهاب', 'عنف', 'خطف', 'اختطاف', 'سكين', 'رصاص', 'مسدس', 'بندقي', 'رشاش', 'سرق', 'أسرق', 'اسرق', 'اعتداء', 'اغتصاب', 'تحرش', 'عصابة', 'مافيا', 'اتجار بالبشر', 'انتحاري', 'تفخيخ', 'مفرقع', 'بارود', 'حرامي', 'لص', 'كيف أؤذي', 'كيف أقتل', 'كيف أسرق', 'كيف أصنع سلاح', 'bomb', 'weapon', 'gun', 'rifle', 'pistol', 'kill', 'murder', 'drug', 'terrorist', 'terrorism', 'violence', 'kidnap', 'knife', 'shoot', 'steal', 'robbery', 'gang', 'mafia'],
+                sexual: ['جنس', 'جنسي', 'إباح', 'اباح', 'عاري', 'عارية', 'زنا', 'زانية', 'عاهر', 'عاهرة', 'شهو', 'مثير جنسي', 'إثار', 'غرائز', 'جماع', 'لواط', 'سحاق', 'بغاء', 'دعارة', 'خليع', 'فاحش', 'فحش', 'مخل بالآداب', 'شهوان', 'محتوى للكبار', 'sex', 'sexual', 'porn', 'pornography', 'naked', 'nude', 'prostitut', 'lust', 'erotic', 'xxx', 'nsfw'],
+                selfharm: ['انتحار', 'أنتحر', 'انتحر', 'أقتل نفسي', 'اقتل نفسي', 'أنهي حياتي', 'انهي حياتي', 'أؤذي نفسي', 'اؤذي نفسي', 'إيذاء النفس', 'ايذاء النفس', 'أقطع نفسي', 'اقطع نفسي', 'أجرح نفسي', 'اجرح نفسي', 'لا أريد العيش', 'لا اريد العيش', 'أريد أن أموت', 'اريد ان اموت', 'أريد الموت', 'اريد الموت', 'تعذيب نفسي', 'جلد الذات', 'أكره حياتي', 'اكره حياتي', 'suicide', 'kill myself', 'end my life', 'self-harm', 'self harm', 'hurt myself', 'want to die', 'end it all']
+            };
+
+            const WARNING_MESSAGES = {
+                politics: 'عذرًا، بصفتي مساعدًا ذكيًا، تم تصميمي لأكون محايدًا تمامًا تجاه القضايا السياسية والانتخابية. لا يمكنني اتخاذ موقف أو تقديم تحليلات سياسية موجهة، لكن يمكنني تزويدك بحقائق تاريخية موثقة إن رغبت.',
+                danger: 'نعتذر، لا يمكنني الاستجابة لهذا الطلب. أنظمتي تمنع تمامًا إنشاء، أو المساعدة في، أو تشجيع أي محتوى يتعلق بالعنف، أو القتل، أو الأنشطة غير القانونية والخطيرة التي قد تلحق الضرر بالأفراد أو المجتمعات.',
+                sexual: 'عذرًا، لا يمكنني توليد أو مناقشة هذا النوع من المحتوى. تم برمجة هذا الذكاء الاصطناعي لتقديم إجابات مناسبة وبيئة آمنة لجميع الفئات العمرية، ويُمنع تمامًا تداول المحتوى الجنسي أو الإباحي.',
+                selfharm: 'إن حياتك وسلامتك أمران غاية في الأهمية. لا يمكنني المساعدة في أي طلب يتعلق بإيذاء النفس أو الانتحار. إذا كنت تمر بوقت عصيب، نرجو منك التواصل فورًا مع الجهات المختصة أو خطوط المساعدة النفسية في بلدك للحصول على الدعم الذي تستحقه.'
+            };
+
+            const WARNING_META = {
+                politics: { icon: 'ti-building-bank', title: 'المحتوى السياسي' },
+                danger: { icon: 'ti-shield-off', title: 'الأفكار الخطيرة أو الجرائم' },
+                sexual: { icon: 'ti-eye-off', title: 'المحتوى الجنسي أو الإباحي' },
+                selfharm: { icon: 'ti-heart-broken', title: 'الانتحار وإيذاء النفس' },
+                profanity: { icon: 'ti-message-off', title: 'الألفاظ النابية' }
+            };
+
+            function normalizeArabic(s) {
+                return String(s || '').toLowerCase()
+                    .replace(/[إأآا]/g, 'ا')
+                    .replace(/[ىي]/g, 'ي')
+                    .replace(/ة/g, 'ه')
+                    .trim();
+            }
+
+            function classifyMessage(text) {
+                if (!text) return null;
+                const normalized = normalizeArabic(text);
+                for (const category of ['selfharm', 'sexual', 'danger', 'politics']) {
+                    const keywords = LOCAL_RULES[category];
+                    for (const keyword of keywords) {
+                        if (normalized.includes(normalizeArabic(keyword))) return category;
+                    }
+                }
+                return null;
+            }
+
+            const QWEN_API_URL = 'http://localhost:11434/v1/chat/completions';
+            const currentModel = 'qwen2.5:0.5b';
+            const SYSTEM_PROMPT = 'أنت مساعد تعليمي فقط لمنصة الأوائل. ارفض فوراً أي سؤال عن: السياسة، الجنس، العنف، الجرائم، الانتحار، إيذاء النفس. إذا طُلب منك أي منها، ارفض باختصار.';
+
+            const aiToggleBtn = document.getElementById('aiToggleBtn');
+            const aiPanel = document.getElementById('aiPanel');
+            const aiPanelOverlay = document.getElementById('aiPanelOverlay');
+            const aiCloseBtn = document.getElementById('aiCloseBtn');
+            const aiMessages = document.getElementById('aiMessages');
+            const aiSendBtn = document.getElementById('aiSendBtn');
+            const clearAIHistoryBtn = document.getElementById('clearAIHistoryBtn');
+            const clearAIHistorySuccess = document.getElementById('clearAIHistorySuccess');
+
+            const aiWarning = document.getElementById('aiWarning');
+            const aiWarningClose = document.getElementById('aiWarningClose');
+            if (aiWarningClose && aiWarning) {
+                aiWarningClose.addEventListener('click', function() {
+                    aiWarning.classList.add('hidden');
+                    setTimeout(function() { aiWarning.style.display = 'none'; }, 400);
                 });
             }
+
+            let aiWelcomeShown = false;
+
+            function getTimeString() {
+                const d = new Date();
+                let h = d.getHours();
+                const m = d.getMinutes().toString().padStart(2, '0');
+                const period = h >= 12 ? 'م' : 'ص';
+                h = h % 12 || 12;
+                return `${h}:${m} ${period}`;
+            }
+
+            let currentSpeakingBtn = null;
+            function stopAllSpeaking() {
+                if ('speechSynthesis' in window) { try { window.speechSynthesis.cancel(); } catch(e) {} }
+                document.querySelectorAll('.ai-msg-listen-btn.speaking').forEach(function(b) {
+                    b.classList.remove('speaking');
+                    b.innerHTML = '<i class="ti ti-volume"></i> استماع';
+                });
+                currentSpeakingBtn = null;
+            }
+
+            function speakText(text, btn) {
+                if (!('speechSynthesis' in window)) { alert('خاصية الاستماع غير مدعومة في متصفحك.'); return; }
+                if (btn.classList.contains('speaking')) { stopAllSpeaking(); return; }
+                stopAllSpeaking();
+                const cleanText = String(text || '').replace(/[#*_`>~\-]+/g, ' ').replace(/\s+/g, ' ').trim();
+                if (!cleanText) return;
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'ar-SA'; utterance.rate = 1; utterance.pitch = 1; utterance.volume = 1;
+                utterance.onstart = function() { btn.classList.add('speaking'); btn.innerHTML = '<i class="ti ti-player-stop"></i> إيقاف'; currentSpeakingBtn = btn; };
+                utterance.onend = function() { btn.classList.remove('speaking'); btn.innerHTML = '<i class="ti ti-volume"></i> استماع'; if (currentSpeakingBtn === btn) currentSpeakingBtn = null; };
+                utterance.onerror = function() { btn.classList.remove('speaking'); btn.innerHTML = '<i class="ti ti-volume"></i> استماع'; if (currentSpeakingBtn === btn) currentSpeakingBtn = null; };
+                window.speechSynthesis.speak(utterance);
+            }
+
+            function createListenButton(bodyElement) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'ai-msg-listen-btn';
+                btn.title = 'استماع للرسالة';
+                btn.innerHTML = '<i class="ti ti-volume"></i> استماع';
+                btn.addEventListener('click', function() {
+                    const text = bodyElement.textContent || bodyElement.innerText || '';
+                    speakText(text, btn);
+                });
+                return btn;
+            }
+
+            function createReportButton(bodyElement) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'ai-msg-report-btn';
+                btn.title = 'الإبلاغ عن هذه الرسالة';
+                btn.innerHTML = '<i class="ti ti-flag"></i> إبلاغ';
+                btn.addEventListener('click', function() {
+                    const messageText = (bodyElement.textContent || bodyElement.innerText || '').trim();
+                    const subject = 'بلاغ عن استجابة من Nellsoft AI - منصة الأوائل';
+                    const body =
+                        'السلام عليكم فريق Restudio،\n\n' +
+                        'أرغب في الإبلاغ عن الاستجابة التالية من مساعد Nellsoft AI:\n\n' +
+                        '─────────────────────────────\n' +
+                        messageText + '\n' +
+                        '─────────────────────────────\n\n' +
+                        'الرجاء مراجعة هذه الاستجابة واتخاذ الإجراء المناسب.\n\n' +
+                        'شاكرًا لكم جهودكم.';
+                    const mailtoUrl = 'mailto:' + SUPPORT_EMAIL +
+                        '?subject=' + encodeURIComponent(subject) +
+                        '&body=' + encodeURIComponent(body);
+                    window.location.href = mailtoUrl;
+                });
+                return btn;
+            }
+
+            function createMessageFooter(sender, bodyElement, timeText) {
+                const footer = document.createElement('div');
+                footer.className = 'ai-msg-footer';
+                const time = document.createElement('span');
+                time.className = 'ai-msg-time';
+                time.textContent = timeText || getTimeString();
+                footer.appendChild(time);
+                if (sender === 'bot') {
+                    const actions = document.createElement('div');
+                    actions.className = 'ai-msg-actions';
+                    actions.appendChild(createListenButton(bodyElement));
+                    actions.appendChild(createReportButton(bodyElement));
+                    footer.appendChild(actions);
+                }
+                return footer;
+            }
+
+            async function saveChatHistory() {
+                try {
+                    const messages = [];
+                    aiMessages.querySelectorAll('.ai-msg').forEach(msgEl => {
+                        const body = msgEl.querySelector('.ai-msg-body');
+                        const time = msgEl.querySelector('.ai-msg-time');
+                        if (body) {
+                            messages.push({
+                                content: body.innerHTML,
+                                sender: msgEl.classList.contains('user') ? 'user' : 'bot',
+                                time: time ? time.textContent : getTimeString()
+                            });
+                        }
+                    });
+                    aiMessages.querySelectorAll('.ai-warning-msg').forEach(warnEl => {
+                        const body = warnEl.querySelector('.warning-body');
+                        const time = warnEl.querySelector('.ai-msg-time');
+                        if (body) {
+                            messages.push({
+                                content: body.innerHTML,
+                                sender: 'warning',
+                                category: Array.from(warnEl.classList).find(c => ['politics', 'danger', 'sexual', 'selfharm', 'profanity'].includes(c)) || 'danger',
+                                time: time ? time.textContent : getTimeString()
+                            });
+                        }
+                    });
+                    await storageSet(AI_HISTORY_KEY, messages);
+                } catch (e) { console.warn('Could not save chat history:', e); }
+            }
+
+            async function loadChatHistory() {
+                try {
+                    const messages = await storageGet(AI_HISTORY_KEY, null);
+                    if (!Array.isArray(messages) || !messages.length) return false;
+
+                    messages.forEach(function(m) {
+                        if (m.sender === 'warning') {
+                            showColoredWarning(m.category || 'danger', m.content, m.time, false);
+                        } else {
+                            const msg = document.createElement('div');
+                            msg.className = 'ai-msg ' + (m.sender === 'user' ? 'user' : 'bot');
+                            const body = document.createElement('div');
+                            body.className = 'ai-msg-body';
+                            if (m.sender === 'user') body.textContent = m.content;
+                            else body.innerHTML = m.content;
+                            msg.appendChild(body);
+                            const footer = createMessageFooter(m.sender === 'user' ? 'user' : 'bot', body, m.time || getTimeString());
+                            msg.appendChild(footer);
+                            aiMessages.appendChild(msg);
+                        }
+                    });
+                    aiMessages.scrollTop = aiMessages.scrollHeight;
+                    return true;
+                } catch (e) { console.warn('Could not load chat history:', e); return false; }
+            }
+
+            async function clearChatHistory() {
+                stopAllSpeaking();
+                await storageRemove(AI_HISTORY_KEY);
+                aiMessages.innerHTML = '';
+                aiWelcomeShown = true;
+
+                setTimeout(async function() {
+                    await addMessage(AUTO_NOTICE_MESSAGE, 'bot');
+                }, 200);
+
+                setTimeout(async function() {
+                    await addMessage(
+                        '<h3><i class="ti ti-hand-stop"></i> مرحباً بك في Nellsoft AI</h3>'
+                        + '<p>أنا هنا لمساعدتك في <strong>الأسئلة التعليمية</strong> و<em>المراجعة الدراسية</em>.</p>'
+                        + '<p>يمكنك سؤالي عن:</p>'
+                        + '<ul>'
+                        + '<li><i class="ti ti-calculator"></i> الرياضيات</li>'
+                        + '<li><i class="ti ti-flask"></i> العلوم</li>'
+                        + '<li><i class="ti ti-book"></i> اللغة العربية</li>'
+                        + '<li><i class="ti ti-language"></i> اللغة الإنجليزية</li>'
+                        + '</ul>'
+                        + '<p>كيف يمكنني خدمتك اليوم؟ <i class="ti ti-mood-smile"></i></p>',
+                        'bot'
+                    );
+                }, 700);
+            }
+
+            function formatAIText(text) {
+                if (!text) return '';
+                let t = String(text);
+                const hasHTML = /<(h[1-6]|p|ul|ol|li|strong|em|br|hr|blockquote|code|pre|table|tr|td|th|span|div)[\s>]/i.test(t);
+                if (hasHTML) {
+                    t = t.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<iframe[\s\S]*?<\/iframe>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<object[\s\S]*?<\/object>/gi, '').replace(/\son\w+\s*=\s*"[^"]*"/gi, '').replace(/\son\w+\s*=\s*'[^']*'/gi, '');
+                    return t;
+                }
+                t = t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                t = t.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+                t = t.replace(/^##\s+(.+)$/gm, '<h3>$1</h3>');
+                t = t.replace(/^#\s+(.+)$/gm, '<h3>$1</h3>');
+                t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+                t = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+                t = t.replace(/__(.+?)__/g, '<strong>$1</strong>');
+                t = t.replace(/_(.+?)_/g, '<em>$1</em>');
+                t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
+                t = t.replace(/^&gt;\s+(.+)$/gm, '<blockquote>$1</blockquote>');
+                const lines = t.split('\n');
+                let result = '';
+                let inUl = false, inOl = false;
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    const ulMatch = line.match(/^\s*[-*]\s+(.+)$/);
+                    const olMatch = line.match(/^\s*\d+[.)]\s+(.+)$/);
+                    if (ulMatch) { if (!inUl) { if (inOl) { result += '</ol>'; inOl = false; } result += '<ul>'; inUl = true; } result += '<li>' + ulMatch[1] + '</li>'; }
+                    else if (olMatch) { if (!inOl) { if (inUl) { result += '</ul>'; inUl = false; } result += '<ol>'; inOl = true; } result += '<li>' + olMatch[1] + '</li>'; }
+                    else { if (inUl) { result += '</ul>'; inUl = false; } if (inOl) { result += '</ol>'; inOl = false; } result += (line.trim() === '' ? '<br>' : line + '<br>'); }
+                }
+                if (inUl) result += '</ul>';
+                if (inOl) result += '</ol>';
+                result = result.replace(/<\/(h[1-6]|ul|ol|li|p|blockquote)>\s*<br>/g, '</$1>');
+                result = result.replace(/<br>\s*<(h[1-6]|ul|ol|li|p|blockquote)/g, '<$1');
+                return result || '<p>' + t + '</p>';
+            }
+
+            function getFallbackResponse() {
+                return 'عذراً يا طالبي العزيز، لا يمكنني الرد عليك حالياً؛ فقد تكون المشكلة بسبب اتصال الإنترنت، أو نتيجة خطأ مؤقت في نموذج الذكاء الاصطناعي.';
+            }
+
+            async function showColoredWarning(category, message, timeText, shouldSave) {
+                if (typeof shouldSave === 'undefined') shouldSave = true;
+                const meta = WARNING_META[category] || WARNING_META.danger;
+                const warningDiv = document.createElement('div');
+                warningDiv.className = 'ai-warning-msg ' + category;
+                warningDiv.innerHTML =
+                    '<div class="warning-icon-wrap"><i class="ti ' + meta.icon + '"></i></div>'
+                    + '<div class="warning-body">'
+                    +   '<span class="warning-title">' + meta.title + '</span>'
+                    +   message
+                    +   '<div class="ai-msg-footer" style="margin-top:8px;justify-content:flex-end;">'
+                    +     '<span class="ai-msg-time">' + (timeText || getTimeString()) + '</span>'
+                    +   '</div>'
+                    + '</div>';
+                aiMessages.appendChild(warningDiv);
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+                if (shouldSave) await saveChatHistory();
+            }
+
+            async function getQwenResponse(userMessage) {
+                try {
+                    const response = await fetch(QWEN_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: currentModel,
+                            messages: [
+                                { role: 'system', content: SYSTEM_PROMPT },
+                                { role: 'user', content: userMessage }
+                            ],
+                            stream: false,
+                            max_tokens: 500,
+                            temperature: 0.7,
+                        })
+                    });
+                    if (!response.ok) throw new Error('API Error: ' + response.status);
+                    const data = await response.json();
+                    const aiResponse = data.choices?.[0]?.message?.content;
+                    if (aiResponse) return aiResponse;
+                    return getFallbackResponse();
+                } catch (error) {
+                    console.error('Error calling Qwen API:', error);
+                    return getFallbackResponse();
+                }
+            }
+
+            async function addMessage(content, sender) {
+                const msg = document.createElement('div');
+                msg.className = 'ai-msg ' + sender;
+                const body = document.createElement('div');
+                body.className = 'ai-msg-body';
+                if (sender === 'bot') body.innerHTML = content;
+                else body.textContent = content;
+                msg.appendChild(body);
+                const footer = createMessageFooter(sender, body, getTimeString());
+                msg.appendChild(footer);
+                aiMessages.appendChild(msg);
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+                await saveChatHistory();
+            }
+
+            function showTyping() {
+                const t = document.createElement('div');
+                t.className = 'ai-typing';
+                t.id = 'aiTypingIndicator';
+                t.innerHTML = '<span></span><span></span><span></span>';
+                aiMessages.appendChild(t);
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+            }
+
+            function hideTyping() {
+                const t = document.getElementById('aiTypingIndicator');
+                if (t) t.remove();
+            }
+
+            async function sendAIMessage() {
+                const text = (typeof window.getAIInputText === 'function') ? window.getAIInputText() : '';
+                if (!text) return;
+
+                if (window.glinFilter) {
+                    try {
+                        const profanityResult = window.glinFilter.checkProfanity(text);
+                        if (profanityResult && profanityResult.containsProfanity) {
+                            await addMessage(text, 'user');
+                            if (typeof window.clearAIInput === 'function') window.clearAIInput();
+                            await showColoredWarning('profanity',
+                                'تم رصد ألفاظ نابية في رسالتك: <strong>' +
+                                (profanityResult.profaneWords || []).join('، ') +
+                                '</strong>. يُرجى استخدام لغة مهذبة ومحترمة.');
+                            return;
+                        }
+                    } catch (err) { console.warn('Profanity check failed:', err); }
+                }
+
+                const localCategory = classifyMessage(text);
+                if (localCategory) {
+                    await addMessage(text, 'user');
+                    if (typeof window.clearAIInput === 'function') window.clearAIInput();
+                    await showColoredWarning(localCategory, WARNING_MESSAGES[localCategory]);
+                    return;
+                }
+
+                await addMessage(text, 'user');
+                if (typeof window.clearAIInput === 'function') window.clearAIInput();
+                aiSendBtn.disabled = true;
+                showTyping();
+
+                try {
+                    const aiReply = await getQwenResponse(text);
+                    hideTyping();
+                    const lowerReply = aiReply.toLowerCase();
+                    let warningCategory = null;
+                    if (lowerReply.includes('محايدًا تمامًا') || lowerReply.includes('تحليلات سياسية') || lowerReply.includes('محايداً تماماً')) warningCategory = 'politics';
+                    else if (lowerReply.includes('أنظمتي تمنع') || lowerReply.includes('أنشطة غير قانونية')) warningCategory = 'danger';
+                    else if (lowerReply.includes('محتوى جنسي') || lowerReply.includes('إباحي')) warningCategory = 'sexual';
+                    else if (lowerReply.includes('إيذاء النفس') || lowerReply.includes('الانتحار')) warningCategory = 'selfharm';
+
+                    if (warningCategory) await showColoredWarning(warningCategory, aiReply);
+                    else await addMessage(formatAIText(aiReply), 'bot');
+                } catch (err) {
+                    console.error(err);
+                    hideTyping();
+                    await addMessage('<p>' + getFallbackResponse() + '</p>', 'bot');
+                } finally {
+                    aiSendBtn.disabled = false;
+                    if (typeof window.focusAIInput === 'function') window.focusAIInput();
+                }
+            }
+
+            async function openAIPanel() {
+                aiPanel.classList.add('show');
+                aiPanelOverlay.classList.add('show');
+                aiPanel.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+
+                if (!aiWelcomeShown) {
+                    aiWelcomeShown = true;
+
+                    setTimeout(async function() {
+                        await addMessage(AUTO_NOTICE_MESSAGE, 'bot');
+                    }, 200);
+
+                    setTimeout(async function() {
+                        await addMessage(
+                            '<h3><i class="ti ti-hand-stop"></i> مرحباً بك في Nellsoft AI</h3>'
+                            + '<p>أنا هنا لمساعدتك في <strong>الأسئلة التعليمية</strong> و<em>المراجعة الدراسية</em>.</p>'
+                            + '<p>يمكنك سؤالي عن:</p>'
+                            + '<ul>'
+                            + '<li><i class="ti ti-calculator"></i> الرياضيات</li>'
+                            + '<li><i class="ti ti-flask"></i> العلوم</li>'
+                            + '<li><i class="ti ti-book"></i> اللغة العربية</li>'
+                            + '<li><i class="ti ti-language"></i> اللغة الإنجليزية</li>'
+                            + '</ul>'
+                            + '<p>كيف يمكنني خدمتك اليوم؟ <i class="ti ti-mood-smile"></i></p>',
+                            'bot'
+                        );
+                    }, 700);
+                }
+
+                setTimeout(function() { if (typeof window.focusAIInput === 'function') window.focusAIInput(); }, 900);
+            }
+
+            function closeAIPanel() {
+                stopAllSpeaking();
+                aiPanel.classList.remove('show');
+                aiPanelOverlay.classList.remove('show');
+                aiPanel.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }
+
+            if (clearAIHistoryBtn) {
+                clearAIHistoryBtn.addEventListener('click', async function() {
+                    const confirmed = confirm('هل أنت متأكد من رغبتك في مسح سجل المحادثات نهائياً مع Restudio Nellsoft AI؟\n\nلا يمكن التراجع عن هذا الإجراء.');
+                    if (!confirmed) return;
+                    await clearChatHistory();
+                    if (clearAIHistorySuccess) { clearAIHistorySuccess.style.display = 'block'; setTimeout(function() { clearAIHistorySuccess.style.display = 'none'; }, 2500); }
+                });
+            }
+
+            if (aiToggleBtn) {
+                aiToggleBtn.addEventListener('click', function(e) { e.preventDefault(); closeAllNavGroups(); openAIPanel(); });
+            }
+
+            if (aiCloseBtn) aiCloseBtn.addEventListener('click', closeAIPanel);
+            if (aiPanelOverlay) aiPanelOverlay.addEventListener('click', closeAIPanel);
+            if (aiSendBtn) aiSendBtn.addEventListener('click', sendAIMessage);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && aiPanel.classList.contains('show')) { closeAIPanel(); }
+            });
+
+            window.addEventListener('beforeunload', function() {
+                try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch(e) {}
+            });
+
+            const restored = await loadChatHistory();
+            if (restored) { aiWelcomeShown = true; }
+
+            console.log('✅ تم تهيئة النظام بالكامل مع localforage');
         });
     </script>
+
+    <!-- ============ MSAL.js ============ -->
+    <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.27.0/lib/msal-browser.min.js"></script>
+
+    <!-- ============ Graph API Module ============ -->
+    <script src="graph-api.js"></script>
+
+    <!-- ============ TipTap Editor ============ -->
+    <script type="module">
+      import { Editor } from 'https://esm.sh/@tiptap/core@2';
+      import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2';
+      import Placeholder from 'https://esm.sh/@tiptap/extension-placeholder@2';
+
+      function initTiptap() {
+        const el = document.getElementById('aiInput');
+        if (!el) { console.error('aiInput element not found'); return; }
+        try {
+          const editor = new Editor({
+            element: el,
+            extensions: [
+              StarterKit.configure({ heading: false, codeBlock: false, horizontalRule: false, blockquote: false, code: false }),
+              Placeholder.configure({ placeholder: 'اكتب رسالتك هنا...' }),
+            ],
+            content: '',
+            editorProps: { attributes: { class: 'tiptap-content', dir: 'rtl' } },
+            onKeyDown: function(view, event) {
+              if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                const sendBtn = document.getElementById('aiSendBtn');
+                if (sendBtn) sendBtn.click();
+                return true;
+              }
+              return false;
+            },
+          });
+
+          window.aiTiptapEditor = editor;
+          window.getAIInputText = function() { const text = editor.getText({ blockSeparator: '\n' }); return (text || '').trim(); };
+          window.clearAIInput = function() { editor.commands.clearContent(); editor.commands.focus(); };
+          window.focusAIInput = function() { editor.commands.focus(); };
+
+          document.querySelectorAll('.tiptap-toolbar-btn').forEach(function(btn) {
+            const action = btn.getAttribute('data-action');
+            btn.addEventListener('mousedown', function(e) { e.preventDefault(); });
+            btn.addEventListener('click', function(e) {
+              e.preventDefault();
+              switch (action) {
+                case 'bold':         editor.chain().focus().toggleBold().run(); break;
+                case 'italic':       editor.chain().focus().toggleItalic().run(); break;
+                case 'bulletList':   editor.chain().focus().toggleBulletList().run(); break;
+                case 'orderedList':  editor.chain().focus().toggleOrderedList().run(); break;
+              }
+            });
+          });
+
+          function updateToolbarState() {
+            document.querySelectorAll('.tiptap-toolbar-btn').forEach(function(btn) {
+              const action = btn.getAttribute('data-action');
+              let isActive = false;
+              if (action === 'bold') isActive = editor.isActive('bold');
+              else if (action === 'italic') isActive = editor.isActive('italic');
+              else if (action === 'bulletList') isActive = editor.isActive('bulletList');
+              else if (action === 'orderedList') isActive = editor.isActive('orderedList');
+              btn.classList.toggle('active', isActive);
+            });
+          }
+          editor.on('selectionUpdate', updateToolbarState);
+          editor.on('transaction', updateToolbarState);
+        } catch (err) { console.error('Failed to initialize TipTap editor:', err); }
+      }
+
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initTiptap); } else { initTiptap(); }
+    </script>
+
 </body>
 </html>
