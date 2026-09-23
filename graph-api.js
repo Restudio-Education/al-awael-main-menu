@@ -12,14 +12,15 @@ const GRAPH_CONFIG = {
 };
 
 let msalInstance = null;
+let msalInitialized = false;
 
-/* ===== تهيئة MSAL ===== */
-function initMSAL() {
+/* ===== تهيئة MSAL (v3 - async) ===== */
+async function initMSAL() {
     if (typeof msal === 'undefined') {
         console.error('❌ MSAL.js not loaded');
         return null;
     }
-    if (msalInstance) return msalInstance;
+    if (msalInstance && msalInitialized) return msalInstance;
 
     msalInstance = new msal.PublicClientApplication({
         auth: {
@@ -34,13 +35,17 @@ function initMSAL() {
         }
     });
 
+    // ✅ MSAL v3: يجب استدعاء initialize() أولاً
+    await msalInstance.initialize();
+    msalInitialized = true;
+
     console.log('✅ MSAL initialized');
     return msalInstance;
 }
 
 /* ===== تسجيل الدخول ===== */
 async function graphSignIn() {
-    if (!msalInstance) initMSAL();
+    if (!msalInitialized) await initMSAL();
     const loginRequest = {
         scopes: GRAPH_CONFIG.scopes,
         prompt: 'select_account'
@@ -52,7 +57,7 @@ async function graphSignIn() {
 
 /* ===== تسجيل الخروج ===== */
 async function graphSignOut() {
-    if (!msalInstance) initMSAL();
+    if (!msalInitialized) await initMSAL();
     const accounts = msalInstance.getAllAccounts();
     if (accounts.length > 0) {
         await msalInstance.logoutPopup({
@@ -65,7 +70,7 @@ async function graphSignOut() {
 
 /* ===== الحصول على Token ===== */
 async function getGraphToken() {
-    if (!msalInstance) initMSAL();
+    if (!msalInitialized) await initMSAL();
     const accounts = msalInstance.getAllAccounts();
     if (accounts.length === 0) return null;
 
@@ -147,8 +152,8 @@ window.GraphAPI = {
     fetchMessages: fetchGraphMessages,
     fetchEvents: fetchGraphEvents,
     isLoggedIn: () => {
-        if (!msalInstance) initMSAL();
-        return msalInstance && msalInstance.getAllAccounts().length > 0;
+        if (!msalInstance) return false;
+        return msalInstance.getAllAccounts().length > 0;
     },
     getAccount: () => {
         if (!msalInstance) return null;
@@ -177,7 +182,23 @@ async function loadRealNotifications() {
         <div class="skeleton-text" style="height:60px;margin:12px 0;"></div>
     `;
 
-    /* --- غير مسجل --- */
+    try {
+        // ✅ تهيئة MSAL أولاً
+        await initMSAL();
+    } catch (e) {
+        console.error('❌ MSAL init failed:', e);
+        modalContent.innerHTML = `
+            <div class="modal-logo"><img src="https://i.postimg.cc/bJ4RsLjj/email-(2).png" alt="إشعارات"></div>
+            <div class="support-text">تعذّر تهيئة نظام الإشعارات.<br><small style="color:#64748b;font-size:0.75rem;">${e.message || ''}</small></div>
+            <button class="close-modal" id="closeNotificationModalBtn">إغلاق</button>
+        `;
+        document.getElementById('closeNotificationModalBtn')
+            ?.addEventListener('click', () => {
+                document.getElementById('notificationModal').style.display = 'none';
+            });
+        return;
+    }
+
     if (!window.GraphAPI.isLoggedIn()) {
         console.log('⚠️ Not logged in');
         modalContent.innerHTML = `
@@ -202,7 +223,7 @@ async function loadRealNotifications() {
                 loadRealNotifications();
             } catch (e) {
                 console.error('Sign in failed:', e);
-                alert('تعذر تسجيل الدخول: ' + e.message);
+                alert('تعذر تسجيل الدخول: ' + (e.message || ''));
             }
         });
         document.getElementById('closeNotificationModalBtn')
@@ -212,7 +233,6 @@ async function loadRealNotifications() {
         return;
     }
 
-    /* --- مسجل --- */
     try {
         console.log('🔑 Getting token...');
         const token = await window.GraphAPI.getToken();
@@ -370,10 +390,21 @@ function bindNotificationButton() {
     console.log('✅ Notification button bound');
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bindNotificationButton);
-} else {
+/* ===== التهيئة الأولية عند تحميل الصفحة ===== */
+async function bootstrapMSAL() {
+    try {
+        await initMSAL();
+        console.log('✅ MSAL bootstrap complete');
+    } catch (e) {
+        console.error('❌ MSAL bootstrap failed:', e);
+    }
     bindNotificationButton();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrapMSAL);
+} else {
+    bootstrapMSAL();
 }
 
 console.log('✅ Graph API module loaded');
